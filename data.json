@@ -91,5 +91,109 @@
         "totalScore": 81,
         "semesterRanking": "Tốt"
     }
+  },
+  "courseWithdrawals": {
+    "2024-2025_HK2": {
+        "eligibleCourses": [
+            {
+                "id": "course1",
+                "stt": 1,
+                "courseCode": "CS101",
+                "courseName": "Nhập môn Lập trình",
+                "credits": 3,
+                "schedule": "Thứ 2, Tiết 1-3, Phòng A101",
+                "instructor": "Nguyễn Văn A"
+            },
+            {
+                "id": "course2",
+                "stt": 2,
+                "courseCode": "MA101",
+                "courseName": "Giải tích 1",
+                "credits": 4,
+                "schedule": "Thứ 3, Tiết 4-6, Phòng B203",
+                "instructor": "Trần Thị B"
+            }
+        ],
+        "withdrawnCourses": [
+            {
+                "id": "wd1",
+                "stt": 1,
+                "courseCode": "PE101",
+                "courseName": "Giáo dục thể chất 1",
+                "credits": 1,
+                "registrationDate": "2024-09-10",
+                "processingDate": "2024-09-12",
+                "result": "Đã duyệt",
+                "notes": ""
+            }
+        ]
+    }
+  },
+  "trainingActivities": {
+      "2024-2025_HK2": [
+          {
+              "id": "act1",
+              "stt": 1,
+              "activity": "Kết quả học tập tăng 1 bậc so với học kỳ trước",
+              "timeLocation": "",
+              "status": "Chưa đăng ký"
+          },
+          {
+              "id": "act2",
+              "stt": 2,
+              "activity": "Bị cấm thi",
+              "timeLocation": "",
+              "status": "Chưa đăng ký"
+          },
+          {
+              "id": "act3",
+              "stt": 3,
+              "activity": "Trễ hạn báo cáo đề tài nghiên cứu khoa học",
+              "timeLocation": "",
+              "status": "Chưa đăng ký"
+          },
+          {
+              "id": "act4",
+              "stt": 4,
+              "activity": "Hủy đề tài nghiên cứu khoa học",
+              "timeLocation": "",
+              "status": "Chưa đăng ký"
+          },
+          {
+              "id": "act5",
+              "stt": 5,
+              "activity": "Đạt giải III, khuyến khích cấp tỉnh, thành phố trực thuộc Trung ương trong các hoạt động chính trị – xã hội, văn hóa, văn nghệ, thể thao, phòng chống tệ nạn xã hội",
+              "timeLocation": "Hội trường A - 15/10/2024",
+              "status": "Chưa đăng ký"
+          },
+          {
+            "id": "act6",
+            "stt": 6,
+            "activity": "Đạt giải I, II (hoặc giải A, B) cấp tỉnh, thành phố trực thuộc Trung ương trong các hoạt động chính trị – xã hội, văn hóa, văn nghệ, thể thao, phòng chống tệ nạn xã hội",
+            "timeLocation": "Nhà thi đấu - 20/11/2024",
+            "status": "Chưa đăng ký"
+        },
+        {
+            "id": "act7",
+            "stt": 7,
+            "activity": "Cấp tỉnh, thành phố trực thuộc trung ương",
+            "timeLocation": "",
+            "status": "Chưa đăng ký"
+        },
+        {
+            "id": "act8",
+            "stt": 8,
+            "activity": "Cấp trung ương, quốc tế",
+            "timeLocation": "",
+            "status": "Chưa đăng ký"
+        },
+        {
+            "id": "act9",
+            "stt": 9,
+            "activity": "Nhận bằng khen của cấp tỉnh, thành phố về công tác Đoàn, Hội SV, Hội Liên hiệp thanh niên; về các thành tích đặc biệt trong học tập, rèn luyện",
+            "timeLocation": "",
+            "status": "Chưa đăng ký"
+        }
+      ]
   }
 } 

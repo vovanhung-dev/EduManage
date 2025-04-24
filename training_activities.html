@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký Tham Gia Hoạt Động Rèn Luyện</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* COMMON STYLES */
+        .sidebar-link { @apply flex items-center px-4 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-blue-800 hover:text-white transition duration-150 ease-in-out; }
+        .sidebar-link svg, .sidebar-link span.icon { @apply mr-3 h-5 w-5 flex-shrink-0; }
+        label { @apply block text-sm font-medium text-gray-700 mb-1; }
+        .table th { @apply px-3 py-2 text-xs font-medium text-white uppercase tracking-wider bg-blue-900 text-center; }
+        .table td { @apply px-3 py-2 text-sm text-gray-900 text-center whitespace-normal border-r border-gray-200; } /* Add right border */
+        .table th:last-child, .table td:last-child { @apply border-r-0; } /* Remove right border for last cell */
+        .table tbody tr { @apply border-b border-gray-200; } /* Add bottom border to rows */
+        .table tbody tr:nth-child(even) { background-color: #f9fafb; } /* gray-50 */
+        .table tbody tr:nth-child(odd) { background-color: #ffffff; }
+        .table-container { @apply bg-white shadow overflow-x-auto sm:rounded-lg border border-gray-200 mt-4; }
+        .table-title { @apply px-4 py-2 sm:px-6 border-b border-gray-200 font-semibold text-red-700 text-sm; } /* Red title */
+        .content-cell { @apply text-left; } /* Left align activity content */
+        .status-cell { @apply text-xs; } /* Smaller text for status */
+        .checkbox-cell input { @apply h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-200">
+        <!-- Sidebar Placeholder -->
+        <div id="sidebar-container"></div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden ml-64">
+            <!-- Header Placeholder -->
+            <div id="header-container"></div>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="bg-white p-5 shadow rounded-md">
+                    <!-- Page Title -->
+                    <div class="border-l-4 border-blue-700 pl-3 mb-6 flex items-center">
+                        <h2 class="text-lg font-semibold text-gray-800 mr-2">ĐĂNG KÝ THAM GIA HOẠT ĐỘNG RÈN LUYỆN</h2>
+                        <div class="w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-blue-700 border-b-[10px] border-b-transparent"></div>
+                    </div>
+
+                    <!-- Filters: School Year and Semester -->
+                    <div class="border border-gray-200 rounded-md p-4">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                             <div>
+                                 <label for="schoolYear">Năm học</label>
+                                 <select id="schoolYear" name="schoolYear" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                     <option>2024-2025</option>
+                                 </select>
+                             </div>
+                             <div>
+                                 <label for="semester">Học kỳ</label>
+                                 <select id="semester" name="semester" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                     <option value="HK1">Học kỳ 1</option>
+                                     <option value="HK2" selected>Học kỳ 2</option>
+                                 </select>
+                             </div>
+                         </div>
+                    </div>
+
+                    <!-- Training Activities Table -->
+                    <div class="table-container">
+                         <h3 class="table-title">Đăng ký tham gia hoạt động rèn luyện</h3>
+                         <table class="min-w-full table">
+                            <thead>
+                                <tr>
+                                    <th class="w-1/12">STT</th>
+                                    <th class="w-5/12">Hoạt động</th>
+                                    <th class="w-3/12">Thời gian - địa điểm</th>
+                                    <th class="w-2/12">Trạng thái</th>
+                                    <th class="w-1/12">Chọn</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activitiesTableBody">
+                                <tr><td colspan="5" class="text-center py-5 border-r-0">Đang tải dữ liệu...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                 <!-- Scroll-to-top button -->
+                 <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none z-40" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                 </button>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        let allActivitiesData = {};
+
+        // Load component function (reuse)
+        async function loadComponent(url, elementId) { /* ... same as other pages ... */
+             try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const html = await response.text();
+                const element = document.getElementById(elementId);
+                if (element) element.innerHTML = html;
+                else console.error(`Element with id '${elementId}' not found.`);
+            } catch (error) {
+                console.error(`Error loading component ${url}:`, error);
+                const element = document.getElementById(elementId);
+                 if (element) element.innerHTML = `<p class="text-red-500 p-4">Error loading component.</p>`;
+            }
+        }
+
+        // Load activities data from JSON
+        async function loadActivitiesData() {
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const jsonData = await response.json();
+                allActivitiesData = jsonData.trainingActivities || {};
+                renderActivitiesTable(); // Initial render
+            } catch (error) {
+                console.error('Error loading activities data:', error);
+                 document.getElementById('activitiesTableBody').innerHTML = `<tr><td colspan="5" class="text-red-500 text-center py-5 border-r-0">Lỗi tải dữ liệu.</td></tr>`;
+            }
+        }
+
+        // Render table based on selected semester
+        function renderActivitiesTable() {
+            const year = document.getElementById('schoolYear').value;
+            const semester = document.getElementById('semester').value;
+            const semesterKey = `${year}_${semester}`;
+            const activities = allActivitiesData[semesterKey] || [];
+
+            const tableBody = document.getElementById('activitiesTableBody');
+            tableBody.innerHTML = '';
+
+            if (activities.length > 0) {
+                activities.forEach((activity) => {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${activity.stt}</td>
+                        <td class="content-cell">${activity.activity}</td>
+                        <td>${activity.timeLocation || '-'}</td>
+                        <td class="status-cell">${activity.status}</td>
+                        <td class="checkbox-cell border-r-0"><input type="checkbox" value="${activity.id}"></td>
+                    `;
+                });
+            } else {
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-gray-500 border-r-0">Không có hoạt động nào cho học kỳ này.</td></tr>`;
+            }
+        }
+
+        // Set active sidebar link function (reuse)
+         function setActiveSidebarLink() { /* ... same as other pages, add condition for training_activities.html ... */
+            const currentFilename = window.location.pathname.split('/').pop() || 'index.html';
+            const sidebarLinks = document.querySelectorAll('#sidebar-container a');
+            sidebarLinks.forEach(link => {
+                let linkHref = link.getAttribute('href');
+                 if (!linkHref || linkHref === '#') {
+                     link.classList.remove('bg-blue-800', 'text-white');
+                     return;
+                 }
+                const linkFilename = linkHref.split('/').pop();
+                let isActive = false;
+                 if (currentFilename === 'dashboard.html' && link.textContent.includes('Đăng ký đề tài luận văn')) {
+                    isActive = true;
+                 } else if (currentFilename === 'graduation.html' && link.textContent.includes('Đăng ký xét tốt nghiệp')) {
+                     isActive = true;
+                 } else if (currentFilename === 'training_points.html' && link.textContent.includes('Điểm rèn luyện')) {
+                     isActive = true;
+                 } else if (currentFilename === 'course_withdrawal.html' && link.textContent.includes('Đăng ký rút học phần')) {
+                     isActive = true;
+                 } else if (currentFilename === 'register_forms.html' && link.textContent.includes('Đăng ký các mẫu đơn')) {
+                     isActive = true;
+                 } else if (currentFilename === 'training_activities.html' && link.textContent.includes('Đăng ký tham gia HĐRL')) { // Add this
+                     isActive = true;
+                 } else {
+                     isActive = linkFilename === currentFilename;
+                 }
+                if (isActive) {
+                    link.classList.add('bg-blue-800', 'text-white');
+                } else {
+                    link.classList.remove('bg-blue-800', 'text-white');
+                }
+            });
+        }
+
+        // DOMContentLoaded Setup
+        document.addEventListener('DOMContentLoaded', async () => {
+            await Promise.all([
+                 loadComponent('sidebar.html', 'sidebar-container'),
+                 loadComponent('header.html', 'header-container')
+             ]);
+            await loadActivitiesData();
+            document.getElementById('schoolYear').addEventListener('change', renderActivitiesTable);
+            document.getElementById('semester').addEventListener('change', renderActivitiesTable);
+            setTimeout(setActiveSidebarLink, 150);
+        });
+
+    </script>
+</body>
+</html> 

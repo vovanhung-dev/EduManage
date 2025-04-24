@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký Các Mẫu Đơn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" /> <!-- Add Font Awesome for icons -->
+    <style>
+        /* COMMON STYLES */
+        .sidebar-link { @apply flex items-center px-4 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-blue-800 hover:text-white transition duration-150 ease-in-out; }
+        .sidebar-link svg, .sidebar-link span.icon { @apply mr-3 h-5 w-5 flex-shrink-0; }
+        /* Add specific styles if needed */
+        label { @apply block text-sm font-medium text-gray-700 mb-1; }
+        /* Style the file input */
+        .file-upload-btn {
+             @apply inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer;
+        }
+        .file-upload-btn i { @apply mr-2 text-pink-500; } /* Style the icon */
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-200">
+        <!-- Sidebar Placeholder -->
+        <div id="sidebar-container"></div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden ml-64">
+            <!-- Header Placeholder -->
+            <div id="header-container"></div>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="bg-white p-5 shadow rounded-md">
+                    <!-- Page Title -->
+                    <div class="border-l-4 border-blue-700 pl-3 mb-6 flex items-center">
+                        <h2 class="text-lg font-semibold text-gray-800 mr-2">ĐĂNG KÝ CÁC MẪU ĐƠN</h2>
+                        <div class="w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-blue-700 border-b-[10px] border-b-transparent"></div>
+                    </div>
+
+                    <!-- Form Filters/Selectors -->
+                    <div class="border border-gray-200 rounded-md p-4">
+                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                            <div>
+                                <label for="trainingProgram">Chương trình đào tạo</label>
+                                <select id="trainingProgram" name="trainingProgram" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option>22110_Công nghệ phần mềm</option>
+                                    <!-- Add other programs -->
+                                </select>
+                            </div>
+                            <div>
+                                <label for="schoolYear">Năm học</label>
+                                <select id="schoolYear" name="schoolYear" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option>2024-2025</option>
+                                    <!-- Add other years -->
+                                </select>
+                            </div>
+                            <div>
+                                <label for="semester">Học kỳ</label>
+                                <select id="semester" name="semester" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="HK1">Học kỳ 1</option>
+                                    <option value="HK2" selected>Học kỳ 2</option>
+                                    <!-- Add other semesters -->
+                                </select>
+                            </div>
+                            <div>
+                                <label for="registrationType">Loại đăng ký</label>
+                                <select id="registrationType" name="registrationType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="">-- Chọn loại --</option>
+                                    <option value="type1">Đơn xin xác nhận</option>
+                                    <option value="type2">Đơn xin bảo lưu</option>
+                                    <!-- Add other types -->
+                                </select>
+                            </div>
+                        </div>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                             <div>
+                                 <label for="registrationPeriod">Đợt đăng ký</label>
+                                 <select id="registrationPeriod" name="registrationPeriod" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                     <option value="">-- Chọn đợt --</option>
+                                     <option value="period1">Đợt 1 (15/08 - 30/08)</option>
+                                      <!-- Add other periods -->
+                                 </select>
+                             </div>
+                              <div>
+                                <label for="proofFile">File minh chứng</label>
+                                <div class="mt-1 flex items-center">
+                                     <label for="file-input" class="file-upload-btn">
+                                         <i class="fas fa-cloud-upload-alt"></i>
+                                         <span>Chọn file</span>
+                                     </label>
+                                     <input id="file-input" name="proofFile" type="file" class="sr-only">
+                                     <span id="file-name" class="ml-3 text-sm text-gray-600">Chưa chọn file nào</span>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder for potential table of past registrations -->
+                    <div class="mt-6">
+                        <!-- <h3 class="text-md font-semibold text-gray-700 mb-3">Lịch sử đăng ký</h3> -->
+                        <!-- Table would go here -->
+                    </div>
+
+                </div>
+
+                 <!-- Scroll-to-top button -->
+                 <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none z-40" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                 </button>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Load component function (reuse)
+        async function loadComponent(url, elementId) { /* ... same as other pages ... */
+             try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const html = await response.text();
+                const element = document.getElementById(elementId);
+                if (element) element.innerHTML = html;
+                else console.error(`Element with id '${elementId}' not found.`);
+            } catch (error) {
+                console.error(`Error loading component ${url}:`, error);
+                const element = document.getElementById(elementId);
+                 if (element) element.innerHTML = `<p class="text-red-500 p-4">Error loading component.</p>`;
+            }
+        }
+
+        // Set active sidebar link function (reuse)
+         function setActiveSidebarLink() { /* ... same as other pages, add condition for register_forms.html ... */
+            const currentFilename = window.location.pathname.split('/').pop() || 'index.html';
+            const sidebarLinks = document.querySelectorAll('#sidebar-container a');
+            sidebarLinks.forEach(link => {
+                let linkHref = link.getAttribute('href');
+                 if (!linkHref || linkHref === '#') {
+                     link.classList.remove('bg-blue-800', 'text-white');
+                     return;
+                 }
+                const linkFilename = linkHref.split('/').pop();
+                let isActive = false;
+                 if (currentFilename === 'dashboard.html' && link.textContent.includes('Đăng ký đề tài luận văn')) {
+                    isActive = true;
+                 } else if (currentFilename === 'graduation.html' && link.textContent.includes('Đăng ký xét tốt nghiệp')) {
+                     isActive = true;
+                 } else if (currentFilename === 'training_points.html' && link.textContent.includes('Điểm rèn luyện')) {
+                     isActive = true;
+                 } else if (currentFilename === 'course_withdrawal.html' && link.textContent.includes('Đăng ký rút học phần')) {
+                     isActive = true;
+                 } else if (currentFilename === 'register_forms.html' && link.textContent.includes('Đăng ký các mẫu đơn')) { // Add this
+                     isActive = true;
+                 } else {
+                     isActive = linkFilename === currentFilename;
+                 }
+                if (isActive) {
+                    link.classList.add('bg-blue-800', 'text-white');
+                } else {
+                    link.classList.remove('bg-blue-800', 'text-white');
+                }
+            });
+        }
+
+        // DOMContentLoaded Setup
+        document.addEventListener('DOMContentLoaded', async () => {
+            await Promise.all([
+                 loadComponent('sidebar.html', 'sidebar-container'),
+                 loadComponent('header.html', 'header-container')
+             ]);
+            // Add event listener for file input
+             const fileInput = document.getElementById('file-input');
+             const fileNameSpan = document.getElementById('file-name');
+             if (fileInput && fileNameSpan) {
+                 fileInput.addEventListener('change', (event) => {
+                     const file = event.target.files[0];
+                     if (file) {
+                         fileNameSpan.textContent = file.name;
+                     } else {
+                         fileNameSpan.textContent = 'Chưa chọn file nào';
+                     }
+                 });
+             }
+
+            setTimeout(setActiveSidebarLink, 150);
+        });
+
+    </script>
+</body>
+</html> 
