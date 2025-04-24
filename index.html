@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Thêm CSS tùy chỉnh nếu cần */
+        .form-input.error {
+            border-color: #f56565; /* red-500 */
+        }
+        .error-message {
+            color: #f56565; /* red-500 */
+            font-size: 0.875rem; /* text-sm */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+
+    <div class="text-center mb-8">
+        <!-- Logo Placeholder -->
+        <img src="https://cdn.haitrieu.com/wp-content/uploads/2021/11/Logo-The-Gioi-Di-Dong-MWG-B-V.png" alt="Logo" class="mx-auto h-20 mb-4">
+        <h1 class="text-xl font-semibold text-blue-800">TÊN TỔ CHỨC/TRƯỜNG HỌC</h1>
+    </div>
+
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold text-blue-800 mb-2 text-center">ĐĂNG NHẬP</h2>
+        <p class="text-gray-600 mb-6 text-center">Cổng thông tin đào tạo</p>
+
+        <form id="loginForm">
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700 text-sm font-medium mb-1">Tên đăng nhập</label>
+                <input type="text" id="username" name="username" class="form-input w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tên đăng nhập">
+                <p id="usernameError" class="error-message mt-1 hidden">Tên đăng nhập là bắt buộc</p>
+            </div>
+
+            <div class="mb-6">
+                <label for="password" class="block text-gray-700 text-sm font-medium mb-1">Mật khẩu</label>
+                <input type="password" id="password" name="password" class="form-input w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Mật khẩu">
+                 <p id="passwordError" class="error-message mt-1 hidden">Mật khẩu là bắt buộc</p>
+                 <p id="credentialError" class="error-message mt-1 hidden">Tên đăng nhập hoặc mật khẩu không đúng.</p>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out mb-4">
+                Đăng nhập
+            </button>
+
+            <button type="button" class="w-full bg-white hover:bg-gray-100 text-gray-700 font-medium py-2 px-4 border border-gray-300 rounded-md focus:outline-none focus:shadow-outline transition duration-150 ease-in-out flex items-center justify-center mb-4">
+                <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#EA4335" d="M24 9.5c3.21 0 5.58.91 7.38 2.45l5.37-5.37C33.37 3.53 29.21 2 24 2 15.87 2 9.27 6.87 6.03 13.08l6.37 4.95C14.05 12.96 18.68 9.5 24 9.5z"/><path fill="#4285F4" d="M46.14 24.73c0-1.63-.14-3.2-.4-4.73H24v9h12.44c-.54 2.91-2.14 5.38-4.6 7.04l6.13 4.75C42.01 37.08 46.14 31.49 46.14 24.73z"/><path fill="#FBBC05" d="M12.4 18.03C11.91 16.64 11.6 15.17 11.6 13.65s.31-2.99.8-4.38L6.03 4.19C4.17 7.74 3 11.89 3 16.35s1.17 8.61 3.03 12.16l6.37-4.95z"/><path fill="#34A853" d="M24 46c5.9 0 10.84-1.94 14.44-5.25l-6.13-4.75c-1.97 1.32-4.48 2.12-7.31 2.12-5.34 0-9.96-3.46-11.6-8.17l-6.37 4.95C9.27 41.13 15.87 46 24 46z"/><path fill="none" d="M3 3h42v42H3z"/></svg>
+                Đăng nhập với Google
+            </button>
+
+            <div class="text-center">
+                <a href="#" class="text-sm text-blue-600 hover:underline">Quên mật khẩu?</a>
+            </div>
+        </form>
+    </div>
+
+    <footer class="mt-8 text-center text-sm text-gray-500">
+        All Rights Reserved Developed by Your Organization
+    </footer>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const usernameError = document.getElementById('usernameError');
+        const passwordError = document.getElementById('passwordError');
+        const credentialError = document.getElementById('credentialError');
+
+        // Hardcoded credentials
+        const validUsername = 'admin';
+        const validPassword = '123456'; // Thay đổi mật khẩu nếu muốn
+
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Ngăn form submit theo cách thông thường
+
+            // Reset errors
+            usernameInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+            usernameError.classList.add('hidden');
+            passwordError.classList.add('hidden');
+            credentialError.classList.add('hidden');
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            let hasError = false;
+
+            // Validate username
+            if (username === '') {
+                usernameInput.classList.add('error');
+                usernameError.classList.remove('hidden');
+                hasError = true;
+            }
+
+            // Validate password
+            if (password === '') {
+                passwordInput.classList.add('error');
+                passwordError.classList.remove('hidden');
+                 hasError = true;
+            }
+
+            // Nếu không có lỗi validation cơ bản, kiểm tra credentials
+            if (!hasError) {
+                 if (username === validUsername && password === validPassword) {
+                    // alert('Đăng nhập thành công!'); // Bỏ alert
+                    // Chuyển hướng hoặc thực hiện hành động khác sau khi đăng nhập thành công
+                    window.location.href = 'dashboard.html'; // Chuyển hướng sang dashboard.html
+                } else {
+                    credentialError.classList.remove('hidden');
+                    passwordInput.classList.add('error'); // Có thể bôi đỏ cả 2 ô
+                    usernameInput.classList.add('error');
+                }
+            }
+        });
+
+        // Xóa lỗi khi người dùng bắt đầu nhập
+        usernameInput.addEventListener('input', () => {
+             if (usernameInput.classList.contains('error')) {
+                 usernameInput.classList.remove('error');
+                 usernameError.classList.add('hidden');
+                 credentialError.classList.add('hidden'); // Cũng ẩn lỗi sai credentials
+             }
+        });
+
+        passwordInput.addEventListener('input', () => {
+             if (passwordInput.classList.contains('error')) {
+                 passwordInput.classList.remove('error');
+                 passwordError.classList.add('hidden');
+                 credentialError.classList.add('hidden'); // Cũng ẩn lỗi sai credentials
+             }
+        });
+
+    </script>
+
+</body>
+</html> 

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Thêm link Font Awesome nếu muốn dùng icon thực tế -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" /> -->
+    <style>
+        /* Style tùy chỉnh nếu cần */
+        .sidebar-link {
+            @apply flex items-center px-4 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-blue-800 hover:text-white transition duration-150 ease-in-out;
+        }
+        .sidebar-link svg {
+            @apply mr-3 h-5 w-5;
+        }
+        .active-link {
+             @apply bg-blue-800 text-white;
+        }
+        .table th, .table td {
+            @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+        }
+        .table tbody tr:nth-child(even) {
+             background-color: #f9fafb; /* gray-50 */
+        }
+         .table td {
+             @apply text-sm text-gray-900;
+         }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-200">
+        <!-- Sidebar -->
+        <div class="fixed inset-y-0 left-0 w-64 bg-blue-900 text-white flex flex-col z-30">
+            <!-- Logo và Thông tin người dùng -->
+            <div class="flex items-center justify-center h-20 border-b border-blue-800 flex-shrink-0 px-4">
+                 <!-- Thay thế bằng logo thật -->
+                 <img src="https://cdn.haitrieu.com/wp-content/uploads/2021/11/Logo-The-Gioi-Di-Dong-MWG-B-V.png" alt="Logo" class="h-10 mr-2">
+                 <span class="font-semibold text-lg">TỔ CHỨC</span>
+            </div>
+            <div class="px-4 py-5 border-b border-blue-800">
+                 <!-- Thông tin User Placeholder -->
+                 <div class="flex items-center mb-3">
+                     <img class="h-10 w-10 rounded-full mr-3 object-cover" src="https://via.placeholder.com/40" alt="User Avatar">
+                     <div>
+                         <p class="text-sm font-medium">Lâm Quang Hồ</p>
+                         <p class="text-xs text-gray-400">SV/HV/NCS - 22110002</p>
+                         <p class="text-xs text-green-400">(Còn học)</p>
+                     </div>
+                 </div>
+                 <hr class="border-blue-700 my-3">
+                 <a href="#" class="sidebar-link text-xs">
+                    <!-- Icon Placeholder -->
+                    <span>Giảm, Trợ cấp</span>
+                 </a>
+                 <a href="#" class="sidebar-link text-xs">
+                    <!-- Icon Placeholder -->
+                    <span>Học phần tương đương</span>
+                 </a>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+                <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Chức năng trực tuyến</p>
+                <a href="#" class="sidebar-link">
+                    <!-- Icon Placeholder --> 📝
+                    <span>Đăng ký học phần</span>
+                </a>
+                <a href="#" class="sidebar-link active-link">
+                    <!-- Icon Placeholder --> 📄
+                    <span>Đăng ký đề tài luận văn</span>
+                </a>
+                <a href="#" class="sidebar-link">
+                   <!-- Icon Placeholder --> 💬
+                    <span>Ý kiến - Thảo Luận</span>
+                </a>
+                 <a href="#" class="sidebar-link">
+                    <!-- Icon Placeholder --> 🎓
+                    <span>Đăng ký xét tốt nghiệp</span>
+                </a>
+                 <a href="#" class="sidebar-link">
+                    <!-- Icon Placeholder --> 📊
+                    <span>Điểm rèn luyện</span>
+                </a>
+                <a href="#" class="sidebar-link">
+                    <!-- Icon Placeholder --> 📜
+                    <span>Đăng ký giấy xác nhận</span>
+                 </a>
+                 <a href="#" class="sidebar-link">
+                    <!-- Icon Placeholder --> 👥
+                    <span>Công tác xã hội</span>
+                </a>
+                 <a href="#" class="sidebar-link">
+                    <!-- Icon Placeholder --> 🏠
+                    <span>Nội trú - Ngoại trú</span>
+                </a>
+                 <a href="#" class="sidebar-link">
+                    <!-- Icon Placeholder --> ✒️
+                    <span>Nhập văn bằng</span>
+                </a>
+                 <a href="#" class="sidebar-link">
+                    <!-- Icon Placeholder --> ❌
+                    <span>Đăng ký rút học phần</span>
+                </a>
+                 <a href="#" class="sidebar-link">
+                    <!-- Icon Placeholder --> 📋
+                    <span>Đăng ký các mẫu đơn</span>
+                </a>
+                 <!-- Thêm các mục menu khác nếu cần -->
+            </nav>
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden ml-64">
+            <!-- Header -->
+            <header class="bg-white shadow-md h-16 flex items-center justify-between px-6 flex-shrink-0">
+                <div class="flex items-center">
+                    <h1 class="text-lg font-semibold text-blue-900">TRƯỜNG ĐẠI HỌC SƯ PHẠM KỸ THUẬT TP.HCM</h1>
+                     <!-- Thay thế bằng tên tổ chức/trường học của bạn -->
+                     <!-- <h1 class="text-lg font-semibold text-blue-900">TÊN TỔ CHỨC/TRƯỜNG HỌC</h1> -->
+                </div>
+                <!-- Header Icons -->
+                <div class="flex items-center space-x-4">
+                    <!-- Placeholder icons -->
+                    <button class="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
+                        <span>🇻🇳</span> <!-- Icon cờ -->
+                    </button>
+                    <button class="relative text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
+                        <span>🔔</span> <!-- Icon chuông -->
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">1</span>
+                    </button>
+                     <button class="focus:outline-none">
+                        <img class="h-8 w-8 rounded-full object-cover" src="https://via.placeholder.com/32" alt="User Avatar">
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="bg-white p-5 shadow rounded-md">
+                    <div class="border-l-4 border-blue-700 pl-3 mb-6">
+                        <h2 class="text-lg font-semibold text-gray-800">ĐĂNG KÝ ĐỀ TÀI - LUẬN VĂN</h2>
+                    </div>
+
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                        <div class="px-4 py-3 sm:px-6 bg-gray-50">
+                            <h3 class="text-sm leading-6 font-medium text-gray-900">DANH SÁCH ĐỀ TÀI ĐĂNG KÝ</h3>
+                        </div>
+                        <div class="border-t border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 table">
+                                <thead class="bg-blue-800 text-white">
+                                    <tr>
+                                        <th scope="col" class="text-white">STT</th>
+                                        <th scope="col" class="text-white">Tên đề tài</th>
+                                        <th scope="col" class="text-white">Từ ngày</th>
+                                        <th scope="col" class="text-white">Đến ngày</th>
+                                        <th scope="col" class="text-white">Đăng ký</th>
+                                        <th scope="col" class="text-white">Tình trạng</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Chưa có đề tài đăng ký</td>
+                                    </tr>
+                                    <!-- Dữ liệu bảng sẽ được thêm vào đây -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Thêm nút scroll-to-top hoặc các thành phần khác -->
+                 <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none">
+                     <span>↑↓</span> <!-- Hoặc dùng icon -->
+                 </button>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Thêm JS nếu cần tương tác động
+    </script>
+</body>
+</html> 
