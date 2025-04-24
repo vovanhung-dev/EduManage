@@ -6,16 +6,91 @@
     <title>Đăng Ký Rút Học Phần</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* COMMON STYLES */
+        /* COMMON STYLES (Using Tailwind @apply for layout/non-table) */
         .sidebar-link { @apply flex items-center px-4 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-blue-800 hover:text-white transition duration-150 ease-in-out; }
         .sidebar-link svg, .sidebar-link span.icon { @apply mr-3 h-5 w-5 flex-shrink-0; }
-        .table th { @apply px-3 py-2 text-xs font-medium text-white uppercase tracking-wider bg-blue-900 text-center; }
-        .table td { @apply px-3 py-2 text-sm text-gray-900 text-center whitespace-normal; } /* Allow wrap, center align default */
-        .table tbody tr:nth-child(even) { background-color: #f3f4f6; } /* gray-100 */
-        .table tbody tr:nth-child(odd) { background-color: #ffffff; }
-        .table-container { @apply bg-white shadow overflow-x-auto sm:rounded-lg border border-gray-200 mb-6; }
-        .table-title { @apply px-4 py-3 sm:px-6 border-b border-gray-200 font-semibold text-blue-800; }
-        .table-title-red { @apply px-4 py-3 sm:px-6 border-b border-gray-200 font-semibold text-red-700; }
+        label { @apply block text-sm font-medium text-gray-700 mb-1; }
+        select { @apply mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md; }
+        .title-bar { @apply border-l-4 border-blue-700 pl-3 mb-6 flex items-center; }
+        .title-text { @apply text-lg font-semibold text-gray-800 mr-2; }
+        .title-decoration { @apply w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-blue-700 border-b-[10px] border-b-transparent; }
+
+        /* Pure CSS for Table Styling */
+        .table-container {
+             background-color: white;
+             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+             overflow-x: auto;
+             border-radius: 0.375rem; /* sm:rounded-lg */
+             border: 1px solid #e5e7eb; /* border-gray-200 */
+             margin-bottom: 1.5rem; /* mb-6 */
+        }
+        .table-title, .table-title-red {
+             padding: 0.75rem 1.5rem; /* px-4 py-3 sm:px-6 */
+             border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+             font-weight: 600; /* font-semibold */
+             font-size: 0.875rem; /* text-sm equivalent */
+        }
+        .table-title {
+             color: #1e40af; /* text-blue-800 */
+        }
+        .table-title-red {
+             color: #b91c1c; /* text-red-700 */
+        }
+        .table {
+            min-width: 100%;
+            border-collapse: collapse; /* Use collapse for cleaner borders */
+            /* divide-y divide-gray-300 handled by tr border-bottom */
+        }
+        .table th {
+             padding: 0.5rem 0.75rem; /* px-3 py-2 */
+             font-size: 0.75rem; /* text-xs */
+             font-weight: 500; /* font-medium */
+             color: white;
+             text-transform: uppercase;
+             letter-spacing: 0.05em; /* tracking-wider */
+             background-color: #1e3a8a; /* bg-blue-900 */
+             text-align: center;
+             border-bottom: 1px solid #d1d5db; /* border-gray-300 - same as divide-y */
+        }
+        .table td {
+             padding: 0.5rem 0.75rem; /* px-3 py-2 */
+             font-size: 0.875rem; /* text-sm */
+             color: #111827; /* text-gray-900 */
+             text-align: center;
+             white-space: normal; /* Allow wrapping */
+             vertical-align: middle;
+             border-top: 1px solid #d1d5db; /* Match divide-y */
+        }
+        /* Alternating Row Colors */
+        .table tbody tr:nth-child(even) {
+             background-color: #f3f4f6 !important; /* gray-100, ensure override */
+        }
+        .table tbody tr:nth-child(odd) {
+             background-color: #ffffff !important; /* white, ensure override */
+        }
+        /* Text Alignment Helpers */
+        .table td.text-left {
+            text-align: left;
+        }
+        .table td.text-center {
+            text-align: center;
+        }
+        /* Checkbox styling */
+        .table input[type="checkbox"] {
+            height: 1rem; /* h-4 */
+            width: 1rem; /* w-4 */
+            color: #4f46e5; /* text-indigo-600 */
+            border-color: #d1d5db; /* border-gray-300 */
+            border-radius: 0.25rem; /* rounded */
+            vertical-align: middle;
+            /* &:focus { ring: ... } */
+        }
+        /* Cell for loading/no data */
+        .table td.no-data-cell {
+            padding: 1.25rem; /* py-5 */
+            text-align: center;
+            border-top: 1px solid #d1d5db;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -119,10 +194,12 @@
                 const element = document.getElementById(elementId);
                 if (element) element.innerHTML = html;
                 else console.error(`Element with id '${elementId}' not found.`);
+                return true;
             } catch (error) {
                 console.error(`Error loading component ${url}:`, error);
                 const element = document.getElementById(elementId);
                  if (element) element.innerHTML = `<p class="text-red-500 p-4">Error loading component.</p>`;
+                return false;
             }
         }
 
@@ -196,47 +273,44 @@
             }
         }
 
-        // Set active sidebar link function (reuse)
-         function setActiveSidebarLink() { /* ... same as other pages, add condition for course_withdrawal.html ... */
-            const currentFilename = window.location.pathname.split('/').pop() || 'index.html';
+        // Central function to set active link
+        function initializeSidebarActiveState() {
+            const currentFilename = window.location.pathname.split('/').pop();
             const sidebarLinks = document.querySelectorAll('#sidebar-container a');
+            const activeClass = 'bg-blue-800';
+            const activeTextClass = 'text-white';
+            const inactiveTextClass = 'text-gray-300';
+
             sidebarLinks.forEach(link => {
+                link.classList.remove(activeClass, activeTextClass);
+                if (!link.classList.contains(inactiveTextClass)) {
+                    link.classList.add(inactiveTextClass);
+                }
                 let linkHref = link.getAttribute('href');
-                 if (!linkHref || linkHref === '#') {
-                     link.classList.remove('bg-blue-800', 'text-white');
-                     return;
-                 }
+                if (!linkHref || linkHref === '#') return;
                 const linkFilename = linkHref.split('/').pop();
-                let isActive = false;
-                 if (currentFilename === 'dashboard.html' && link.textContent.includes('Đăng ký đề tài luận văn')) {
-                    isActive = true;
-                 } else if (currentFilename === 'graduation.html' && link.textContent.includes('Đăng ký xét tốt nghiệp')) {
-                     isActive = true;
-                 } else if (currentFilename === 'training_points.html' && link.textContent.includes('Điểm rèn luyện')) {
-                     isActive = true;
-                 } else if (currentFilename === 'course_withdrawal.html' && link.textContent.includes('Đăng ký rút học phần')) { // Add this
-                     isActive = true;
-                 } else {
-                     isActive = linkFilename === currentFilename;
-                 }
-                if (isActive) {
-                    link.classList.add('bg-blue-800', 'text-white');
-                } else {
-                    link.classList.remove('bg-blue-800', 'text-white');
+                if (linkFilename === currentFilename) {
+                    link.classList.remove(inactiveTextClass);
+                    link.classList.add(activeClass, activeTextClass);
                 }
             });
         }
 
         // DOMContentLoaded Setup
         document.addEventListener('DOMContentLoaded', async () => {
-            await Promise.all([
-                 loadComponent('sidebar.html', 'sidebar-container'),
-                 loadComponent('header.html', 'header-container')
-             ]);
+            // Load components and wait for them
+             const sidebarLoaded = loadComponent('sidebar.html', 'sidebar-container');
+             const headerLoaded = loadComponent('header.html', 'header-container');
+             await Promise.all([sidebarLoaded, headerLoaded]);
+
+            // Initialize active link AFTER sidebar is confirmed loaded
+             if (await sidebarLoaded) {
+                  initializeSidebarActiveState();
+              }
+
             await loadWithdrawalData();
             document.getElementById('schoolYear').addEventListener('change', renderWithdrawalTables);
             document.getElementById('semester').addEventListener('change', renderWithdrawalTables);
-            setTimeout(setActiveSidebarLink, 150);
         });
 
     </script>

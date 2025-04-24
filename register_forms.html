@@ -122,69 +122,56 @@
                 const element = document.getElementById(elementId);
                 if (element) element.innerHTML = html;
                 else console.error(`Element with id '${elementId}' not found.`);
+                return true;
             } catch (error) {
                 console.error(`Error loading component ${url}:`, error);
                 const element = document.getElementById(elementId);
                  if (element) element.innerHTML = `<p class="text-red-500 p-4">Error loading component.</p>`;
+                return false;
             }
         }
 
-        // Set active sidebar link function (reuse)
-         function setActiveSidebarLink() { /* ... same as other pages, add condition for register_forms.html ... */
-            const currentFilename = window.location.pathname.split('/').pop() || 'index.html';
+        // Set active sidebar link function (REMOVED)
+        /* function setActiveSidebarLink() { ... } */
+
+        // Central function to set active link
+        function initializeSidebarActiveState() {
+            const currentFilename = window.location.pathname.split('/').pop();
             const sidebarLinks = document.querySelectorAll('#sidebar-container a');
+            const activeClass = 'bg-blue-800';
+            const activeTextClass = 'text-white';
+            const inactiveTextClass = 'text-gray-300';
+
             sidebarLinks.forEach(link => {
+                link.classList.remove(activeClass, activeTextClass);
+                if (!link.classList.contains(inactiveTextClass)) {
+                    link.classList.add(inactiveTextClass);
+                }
                 let linkHref = link.getAttribute('href');
-                 if (!linkHref || linkHref === '#') {
-                     link.classList.remove('bg-blue-800', 'text-white');
-                     return;
-                 }
+                if (!linkHref || linkHref === '#') return;
                 const linkFilename = linkHref.split('/').pop();
-                let isActive = false;
-                 if (currentFilename === 'dashboard.html' && link.textContent.includes('Đăng ký đề tài luận văn')) {
-                    isActive = true;
-                 } else if (currentFilename === 'graduation.html' && link.textContent.includes('Đăng ký xét tốt nghiệp')) {
-                     isActive = true;
-                 } else if (currentFilename === 'training_points.html' && link.textContent.includes('Điểm rèn luyện')) {
-                     isActive = true;
-                 } else if (currentFilename === 'course_withdrawal.html' && link.textContent.includes('Đăng ký rút học phần')) {
-                     isActive = true;
-                 } else if (currentFilename === 'register_forms.html' && link.textContent.includes('Đăng ký các mẫu đơn')) { // Add this
-                     isActive = true;
-                 } else {
-                     isActive = linkFilename === currentFilename;
-                 }
-                if (isActive) {
-                    link.classList.add('bg-blue-800', 'text-white');
-                } else {
-                    link.classList.remove('bg-blue-800', 'text-white');
+                if (linkFilename === currentFilename) {
+                    link.classList.remove(inactiveTextClass);
+                    link.classList.add(activeClass, activeTextClass);
                 }
             });
         }
 
         // DOMContentLoaded Setup
         document.addEventListener('DOMContentLoaded', async () => {
-            await Promise.all([
-                 loadComponent('sidebar.html', 'sidebar-container'),
-                 loadComponent('header.html', 'header-container')
-             ]);
-            // Add event listener for file input
-             const fileInput = document.getElementById('file-input');
-             const fileNameSpan = document.getElementById('file-name');
-             if (fileInput && fileNameSpan) {
-                 fileInput.addEventListener('change', (event) => {
-                     const file = event.target.files[0];
-                     if (file) {
-                         fileNameSpan.textContent = file.name;
-                     } else {
-                         fileNameSpan.textContent = 'Chưa chọn file nào';
-                     }
-                 });
-             }
+             // Load components and wait for them
+             const sidebarLoaded = loadComponent('sidebar.html', 'sidebar-container');
+             const headerLoaded = loadComponent('header.html', 'header-container');
+             await Promise.all([sidebarLoaded, headerLoaded]);
 
-            setTimeout(setActiveSidebarLink, 150);
+            // Initialize active link AFTER sidebar is confirmed loaded
+             if (await sidebarLoaded) {
+                  initializeSidebarActiveState();
+              }
+
+            // Placeholder for page-specific logic (e.g., data loading)
+            // setTimeout(setActiveSidebarLink, 150); // REMOVED this line
         });
-
     </script>
 </body>
 </html> 

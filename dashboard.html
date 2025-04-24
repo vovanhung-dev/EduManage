@@ -200,12 +200,14 @@
                 } else {
                     console.error(`Element with id '${elementId}' not found.`);
                 }
+                return true;
             } catch (error) {
                 console.error('Error loading component:', error);
                 const element = document.getElementById(elementId);
                  if (element) {
                     element.innerHTML = `<p class="text-red-500 p-4">Error loading component from ${url}.</p>`;
                  }
+                return false;
             }
         }
 
@@ -334,62 +336,49 @@
             }
         }
 
-        // Function to set active sidebar link based on current page filename
-        function setActiveSidebarLink() {
-            const currentFilename = window.location.pathname.split('/').pop() || 'index.html'; // Default to index if root
+        // Central function to set active link
+        function initializeSidebarActiveState() {
+            const currentFilename = window.location.pathname.split('/').pop();
             const sidebarLinks = document.querySelectorAll('#sidebar-container a');
-            
+            const activeClass = 'bg-blue-800';
+            const activeTextClass = 'text-white';
+            const inactiveTextClass = 'text-gray-300';
+
             sidebarLinks.forEach(link => {
+                link.classList.remove(activeClass, activeTextClass);
+                if (!link.classList.contains(inactiveTextClass)) {
+                    link.classList.add(inactiveTextClass);
+                }
                 let linkHref = link.getAttribute('href');
-                if (!linkHref || linkHref === '#') {
-                     link.classList.remove('bg-blue-800', 'text-white'); // Remove active from placeholder links
-                     return;
-                 }
+                if (!linkHref || linkHref === '#') return;
                 const linkFilename = linkHref.split('/').pop();
-
-                // Handle special case: dashboard.html corresponds to 'Đăng ký đề tài luận văn'
-                let isActive = false;
-                if (currentFilename === 'dashboard.html' && link.textContent.includes('Đăng ký đề tài luận văn')) {
-                    isActive = true;
-                } else if (currentFilename === 'graduation.html' && link.textContent.includes('Đăng ký xét tốt nghiệp')) {
-                     isActive = true;
-                 }
-                 // Add more else if conditions for other pages here
-                 // else if (currentFilename === 'some_other_page.html' && link.textContent.includes('Some Other Text')) {
-                 //     isActive = true;
-                 // }
-                 else {
-                     // General case: match filename
-                     isActive = linkFilename === currentFilename;
-                 }
-
-                if (isActive) {
-                    link.classList.add('bg-blue-800', 'text-white');
-                } else {
-                    link.classList.remove('bg-blue-800', 'text-white');
+                if (linkFilename === currentFilename) {
+                    link.classList.remove(inactiveTextClass);
+                    link.classList.add(activeClass, activeTextClass);
                 }
             });
         }
 
         // DOMContentLoaded Setup
         document.addEventListener('DOMContentLoaded', async () => {
-             // Load static components first
-             await Promise.all([
-                 loadComponent('sidebar.html', 'sidebar-container'),
-                 loadComponent('header.html', 'header-container')
-             ]);
+            // Load components and wait for them
+            const sidebarLoaded = loadComponent('sidebar.html', 'sidebar-container');
+            const headerLoaded = loadComponent('header.html', 'header-container');
+            await Promise.all([sidebarLoaded, headerLoaded]);
 
-             // Now load dynamic data and render table
-             await loadInitialData();
+            // Initialize active link AFTER sidebar is confirmed loaded
+            if (await sidebarLoaded) {
+                initializeSidebarActiveState();
+            }
+
+            // Now load dynamic data and render table
+            await loadInitialData();
 
             // Add event listeners after components might be loaded
              addTopicBtn.addEventListener('click', openAddModal);
              cancelBtn.addEventListener('click', closeModal);
              closeModalSpan.addEventListener('click', closeModal);
              topicForm.addEventListener('submit', saveTopic);
-
-             // Set active link after components are likely loaded
-            setTimeout(setActiveSidebarLink, 150); // Use the updated function
         });
 
         // Close modal if clicking outside the content
