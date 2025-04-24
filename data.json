@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Nghiên cứu ứng dụng AI trong nhận diện khuôn mặt",
+    "startDate": "2024-08-01",
+    "endDate": "2024-12-31",
+    "registered": false,
+    "status": "Chưa đăng ký"
+  },
+  {
+    "id": 2,
+    "name": "Xây dựng hệ thống quản lý thư viện trực tuyến",
+    "startDate": "2024-09-01",
+    "endDate": "2025-01-15",
+    "registered": true,
+    "status": "Đã đăng ký"
+  },
+  {
+    "id": 3,
+    "name": "Phân tích dữ liệu bán hàng và dự báo xu hướng",
+    "startDate": "2024-08-15",
+    "endDate": "2024-11-30",
+    "registered": false,
+    "status": "Chưa đăng ký"
+  }
+] 

@@ -3,147 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Dashboard - Quản lý Đề tài</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Thêm link Font Awesome nếu muốn dùng icon thực tế -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" /> -->
     <style>
-        /* Style tùy chỉnh nếu cần */
+        /* COMMON STYLES FOR COMPONENTS */
         .sidebar-link {
             @apply flex items-center px-4 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-blue-800 hover:text-white transition duration-150 ease-in-out;
         }
-        .sidebar-link svg {
-            @apply mr-3 h-5 w-5;
+        .sidebar-link svg, .sidebar-link span.icon {
+            @apply mr-3 h-5 w-5 flex-shrink-0;
         }
         .active-link {
-             @apply bg-blue-800 text-white;
+             /* @apply bg-blue-800 text-white; */ /* Remove static active link style here */
         }
         .table th, .table td {
-            @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+            @apply px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
         }
         .table tbody tr:nth-child(even) {
              background-color: #f9fafb; /* gray-50 */
         }
          .table td {
-             @apply text-sm text-gray-900;
+             @apply text-sm text-gray-900 whitespace-nowrap;
+         }
+         /* Modal styles */
+         .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 50; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            /* Use flex to center content (optional, deviates slightly from example but often desired) */
+            /* @apply flex items-center justify-center; */
+         }
+         .modal-content {
+            background-color: #fefefe;
+            /* Adjust margin for centering if not using flex on .modal */
+             margin: 10% auto; /* 10% from the top and centered */
+            /* Keep Tailwind padding/width for consistency or use px values */
+            @apply p-6 rounded-lg shadow-xl w-full max-w-md mx-auto; /* Example using Tailwind */
+            /* padding: 20px; */
+            /* border: 1px solid #888; */
+            /* width: 80%; */
+         }
+         .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1; /* Adjust line height */
+         }
+         .close:hover,
+         .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
          }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen bg-gray-200">
-        <!-- Sidebar -->
-        <div class="fixed inset-y-0 left-0 w-64 bg-blue-900 text-white flex flex-col z-30">
-            <!-- Logo và Thông tin người dùng -->
-            <div class="flex items-center justify-center h-20 border-b border-blue-800 flex-shrink-0 px-4">
-                 <!-- Thay thế bằng logo thật -->
-                 <img src="https://cdn.haitrieu.com/wp-content/uploads/2021/11/Logo-The-Gioi-Di-Dong-MWG-B-V.png" alt="Logo" class="h-10 mr-2">
-                 <span class="font-semibold text-lg">TỔ CHỨC</span>
-            </div>
-            <div class="px-4 py-5 border-b border-blue-800">
-                 <!-- Thông tin User Placeholder -->
-                 <div class="flex items-center mb-3">
-                     <img class="h-10 w-10 rounded-full mr-3 object-cover" src="https://via.placeholder.com/40" alt="User Avatar">
-                     <div>
-                         <p class="text-sm font-medium">Lâm Quang Hồ</p>
-                         <p class="text-xs text-gray-400">SV/HV/NCS - 22110002</p>
-                         <p class="text-xs text-green-400">(Còn học)</p>
-                     </div>
-                 </div>
-                 <hr class="border-blue-700 my-3">
-                 <a href="#" class="sidebar-link text-xs">
-                    <!-- Icon Placeholder -->
-                    <span>Giảm, Trợ cấp</span>
-                 </a>
-                 <a href="#" class="sidebar-link text-xs">
-                    <!-- Icon Placeholder -->
-                    <span>Học phần tương đương</span>
-                 </a>
-            </div>
-
-            <!-- Navigation -->
-            <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
-                <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Chức năng trực tuyến</p>
-                <a href="#" class="sidebar-link">
-                    <!-- Icon Placeholder --> 📝
-                    <span>Đăng ký học phần</span>
-                </a>
-                <a href="#" class="sidebar-link active-link">
-                    <!-- Icon Placeholder --> 📄
-                    <span>Đăng ký đề tài luận văn</span>
-                </a>
-                <a href="#" class="sidebar-link">
-                   <!-- Icon Placeholder --> 💬
-                    <span>Ý kiến - Thảo Luận</span>
-                </a>
-                 <a href="#" class="sidebar-link">
-                    <!-- Icon Placeholder --> 🎓
-                    <span>Đăng ký xét tốt nghiệp</span>
-                </a>
-                 <a href="#" class="sidebar-link">
-                    <!-- Icon Placeholder --> 📊
-                    <span>Điểm rèn luyện</span>
-                </a>
-                <a href="#" class="sidebar-link">
-                    <!-- Icon Placeholder --> 📜
-                    <span>Đăng ký giấy xác nhận</span>
-                 </a>
-                 <a href="#" class="sidebar-link">
-                    <!-- Icon Placeholder --> 👥
-                    <span>Công tác xã hội</span>
-                </a>
-                 <a href="#" class="sidebar-link">
-                    <!-- Icon Placeholder --> 🏠
-                    <span>Nội trú - Ngoại trú</span>
-                </a>
-                 <a href="#" class="sidebar-link">
-                    <!-- Icon Placeholder --> ✒️
-                    <span>Nhập văn bằng</span>
-                </a>
-                 <a href="#" class="sidebar-link">
-                    <!-- Icon Placeholder --> ❌
-                    <span>Đăng ký rút học phần</span>
-                </a>
-                 <a href="#" class="sidebar-link">
-                    <!-- Icon Placeholder --> 📋
-                    <span>Đăng ký các mẫu đơn</span>
-                </a>
-                 <!-- Thêm các mục menu khác nếu cần -->
-            </nav>
-        </div>
+        <!-- Sidebar Placeholder -->
+        <div id="sidebar-container"></div>
 
         <!-- Main content -->
-        <div class="flex-1 flex flex-col overflow-hidden ml-64">
-            <!-- Header -->
-            <header class="bg-white shadow-md h-16 flex items-center justify-between px-6 flex-shrink-0">
-                <div class="flex items-center">
-                    <h1 class="text-lg font-semibold text-blue-900">TRƯỜNG ĐẠI HỌC SƯ PHẠM KỸ THUẬT TP.HCM</h1>
-                     <!-- Thay thế bằng tên tổ chức/trường học của bạn -->
-                     <!-- <h1 class="text-lg font-semibold text-blue-900">TÊN TỔ CHỨC/TRƯỜNG HỌC</h1> -->
-                </div>
-                <!-- Header Icons -->
-                <div class="flex items-center space-x-4">
-                    <!-- Placeholder icons -->
-                    <button class="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
-                        <span>🇻🇳</span> <!-- Icon cờ -->
-                    </button>
-                    <button class="relative text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
-                        <span>🔔</span> <!-- Icon chuông -->
-                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">1</span>
-                    </button>
-                     <button class="focus:outline-none">
-                        <img class="h-8 w-8 rounded-full object-cover" src="https://via.placeholder.com/32" alt="User Avatar">
-                    </button>
-                </div>
-            </header>
+        <div class="flex-1 flex flex-col overflow-hidden ml-64"> <!-- Adjust ml-64 if sidebar width changes -->
+            <!-- Header Placeholder -->
+            <div id="header-container"></div>
 
             <!-- Content Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
                 <div class="bg-white p-5 shadow rounded-md">
-                    <div class="border-l-4 border-blue-700 pl-3 mb-6">
+                    <div class="flex justify-between items-center border-l-4 border-blue-700 pl-3 mb-6">
                         <h2 class="text-lg font-semibold text-gray-800">ĐĂNG KÝ ĐỀ TÀI - LUẬN VĂN</h2>
+                        <button id="addTopicBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-sm">
+                            Thêm đề tài
+                        </button>
                     </div>
 
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div class="bg-white shadow overflow-x-auto sm:rounded-lg">
                         <div class="px-4 py-3 sm:px-6 bg-gray-50">
                             <h3 class="text-sm leading-6 font-medium text-gray-900">DANH SÁCH ĐỀ TÀI ĐĂNG KÝ</h3>
                         </div>
@@ -151,34 +94,294 @@
                             <table class="min-w-full divide-y divide-gray-200 table">
                                 <thead class="bg-blue-800 text-white">
                                     <tr>
-                                        <th scope="col" class="text-white">STT</th>
-                                        <th scope="col" class="text-white">Tên đề tài</th>
-                                        <th scope="col" class="text-white">Từ ngày</th>
-                                        <th scope="col" class="text-white">Đến ngày</th>
-                                        <th scope="col" class="text-white">Đăng ký</th>
-                                        <th scope="col" class="text-white">Tình trạng</th>
+                                        <th scope="col" class="text-white w-1/12">STT</th>
+                                        <th scope="col" class="text-white w-4/12">Tên đề tài</th>
+                                        <th scope="col" class="text-white w-2/12">Từ ngày</th>
+                                        <th scope="col" class="text-white w-2/12">Đến ngày</th>
+                                        <!-- <th scope="col" class="text-white">Đăng ký</th> -->
+                                        <th scope="col" class="text-white w-1/12">Tình trạng</th>
+                                        <th scope="col" class="text-white w-2/12">Hành động</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Chưa có đề tài đăng ký</td>
+                                <tbody id="topicsTableBody" class="bg-white divide-y divide-gray-200">
+                                    <!-- Table rows will be generated by JS -->
+                                     <tr>
+                                        <td colspan="6" class="px-6 py-10 whitespace-nowrap text-sm text-gray-500 text-center">Đang tải dữ liệu...</td>
                                     </tr>
-                                    <!-- Dữ liệu bảng sẽ được thêm vào đây -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                 <!-- Thêm nút scroll-to-top hoặc các thành phần khác -->
-                 <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none">
-                     <span>↑↓</span> <!-- Hoặc dùng icon -->
+
+                <!-- Add/Edit Topic Modal -->
+                <div id="topicModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center z-50">
+                    <!-- Modal Content Box -->
+                    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg relative m-auto">
+                        <!-- Close Button -->
+                        <span id="closeModalSpan" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl cursor-pointer">&times;</span>
+                        <!-- Modal Title -->
+                         <h3 id="modalTitle" class="text-xl font-semibold text-gray-800 mb-4">Thêm/Sửa Đề Tài</h3>
+                         <!-- Modal Form -->
+                         <form id="topicForm" class="mt-2">
+                            <input type="hidden" id="topicId">
+                            <div class="mb-4">
+                                <label for="topicName" class="block text-sm font-medium text-gray-700 mb-1">Tên đề tài</label>
+                                <input type="text" name="topicName" id="topicName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">Từ ngày</label>
+                                    <input type="date" name="startDate" id="startDate" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">Đến ngày</label>
+                                    <input type="date" name="endDate" id="endDate" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+                             <div class="mb-4">
+                                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Tình trạng</label>
+                                <select id="status" name="status" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option value="Chưa đăng ký">Chưa đăng ký</option>
+                                    <option value="Đã đăng ký">Đã đăng ký</option>
+                                    <option value="Đang chờ duyệt">Đang chờ duyệt</option>
+                                    <option value="Đã hủy">Đã hủy</option>
+                                </select>
+                            </div>
+                            <div class="mt-6 flex justify-end space-x-3">
+                                <button type="button" id="cancelBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded text-sm">
+                                    Hủy
+                                </button>
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm">
+                                    Lưu
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                 <!-- Scroll-to-top button -->
+                 <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none z-40" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
                  </button>
             </main>
         </div>
     </div>
 
     <script>
-        // Thêm JS nếu cần tương tác động
+        let topicsData = []; // To store topics data in memory
+        let currentEditId = null;
+
+        const modal = document.getElementById('topicModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const topicForm = document.getElementById('topicForm');
+        const topicIdInput = document.getElementById('topicId');
+        const topicNameInput = document.getElementById('topicName');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+        const statusSelect = document.getElementById('status');
+        const tableBody = document.getElementById('topicsTableBody');
+        const addTopicBtn = document.getElementById('addTopicBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const closeModalSpan = document.getElementById('closeModalSpan');
+
+        // Function to load HTML content into an element
+        async function loadComponent(url, elementId) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const html = await response.text();
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.innerHTML = html;
+                } else {
+                    console.error(`Element with id '${elementId}' not found.`);
+                }
+            } catch (error) {
+                console.error('Error loading component:', error);
+                const element = document.getElementById(elementId);
+                 if (element) {
+                    element.innerHTML = `<p class="text-red-500 p-4">Error loading component from ${url}.</p>`;
+                 }
+            }
+        }
+
+        // Function to load initial data from JSON
+        async function loadInitialData() {
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                topicsData = await response.json();
+                renderTable();
+            } catch (error) {
+                console.error('Error loading initial data:', error);
+                tableBody.innerHTML = `<tr><td colspan="6" class="text-red-500 text-center py-10">Lỗi khi tải dữ liệu đề tài.</td></tr>`;
+            }
+        }
+
+        // Function to render the table
+        function renderTable() {
+            tableBody.innerHTML = ''; // Clear existing rows
+            if (topicsData.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-gray-500">Chưa có đề tài nào.</td></tr>`;
+                return;
+            }
+
+            topicsData.forEach((topic, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-4 py-3 text-sm text-gray-900">${index + 1}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900 break-words w-4/12">${topic.name}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900">${topic.startDate}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900">${topic.endDate}</td>
+                    <td class="px-4 py-3 text-sm">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${topic.status === 'Đã đăng ký' ? 'bg-green-100 text-green-800' : topic.status === 'Đã hủy' ? 'bg-red-100 text-red-800': 'bg-yellow-100 text-yellow-800'}">
+                            ${topic.status}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-900 space-x-2 flex items-center">
+                        <button onclick="openEditModal(${topic.id})" class="text-indigo-600 hover:text-indigo-900" title="Sửa">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        </button>
+                        <button onclick="deleteTopic(${topic.id})" class="text-red-600 hover:text-red-900" title="Xóa">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to open the modal for adding
+        function openAddModal() {
+            currentEditId = null;
+            modalTitle.textContent = 'Thêm Đề Tài Mới';
+            topicForm.reset();
+            topicIdInput.value = '';
+            modal.style.display = "flex"; // Use flex to enable centering by m-auto
+            topicNameInput.focus(); // Focus first field
+        }
+
+        // Function to open the modal for editing
+        function openEditModal(id) {
+            const topic = topicsData.find(t => t.id === id);
+            if (topic) {
+                currentEditId = id;
+                modalTitle.textContent = 'Sửa Thông Tin Đề Tài';
+                topicIdInput.value = topic.id;
+                topicNameInput.value = topic.name;
+                startDateInput.value = topic.startDate;
+                endDateInput.value = topic.endDate;
+                statusSelect.value = topic.status;
+                modal.style.display = "flex"; // Use flex to enable centering by m-auto
+                 topicNameInput.focus(); // Focus first field
+            } else {
+                console.error('Topic not found for editing:', id);
+            }
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            modal.style.display = "none"; // Hide modal
+            topicForm.reset();
+            currentEditId = null;
+        }
+
+        // Function to save topic (add or edit)
+        function saveTopic(event) {
+            event.preventDefault();
+            const formData = new FormData(topicForm);
+            const topic = {
+                id: currentEditId ? currentEditId : Date.now(), // Generate new ID if adding
+                name: formData.get('topicName'),
+                startDate: formData.get('startDate'),
+                endDate: formData.get('endDate'),
+                status: formData.get('status'),
+                registered: formData.get('status') === 'Đã đăng ký' // Update registered based on status
+            };
+
+            if (currentEditId) {
+                // Update existing topic
+                const index = topicsData.findIndex(t => t.id === currentEditId);
+                if (index !== -1) {
+                    topicsData[index] = topic;
+                }
+            } else {
+                // Add new topic
+                topicsData.push(topic);
+            }
+
+            renderTable();
+            closeModal();
+            // In a real app, you would send this data to a backend API to save.
+            console.log('Data updated (in memory):', topicsData);
+        }
+
+        // Function to delete topic
+        function deleteTopic(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa đề tài này?')) {
+                topicsData = topicsData.filter(t => t.id !== id);
+                renderTable();
+                // In a real app, you would send a request to a backend API to delete.
+                 console.log('Data updated (in memory):', topicsData);
+            }
+        }
+
+        // Load components and initial data when the DOM is ready
+        document.addEventListener('DOMContentLoaded', async () => {
+             // Load static components first
+             await Promise.all([
+                 loadComponent('sidebar.html', 'sidebar-container'),
+                 loadComponent('header.html', 'header-container')
+             ]);
+
+             // Now load dynamic data and render table
+             await loadInitialData();
+
+            // Add event listeners after components might be loaded
+             addTopicBtn.addEventListener('click', openAddModal);
+             cancelBtn.addEventListener('click', closeModal);
+             closeModalSpan.addEventListener('click', closeModal);
+             topicForm.addEventListener('submit', saveTopic);
+
+             // Set active link in sidebar based on current page (example)
+            // Wait a bit for sidebar content to potentially load
+            setTimeout(() => {
+                const currentPath = window.location.pathname.split('/').pop() || 'dashboard.html'; // Default if path is '/' or empty
+                const sidebarLinks = document.querySelectorAll('#sidebar-container a'); // Select all links inside sidebar
+                sidebarLinks.forEach(link => {
+                    // Normalize href to match currentPath format (e.g., remove leading './')
+                    let linkHref = link.getAttribute('href');
+                    if (linkHref === '#') return; // Skip placeholder links
+                    linkHref = linkHref.replace(/^\.\//, ''); // Remove ./ if present
+
+                    // Check if the link corresponds to the current page
+                    // For this example, we assume dashboard.html is the target for 'Đăng ký đề tài luận văn'
+                    const isDashboardPage = currentPath === 'dashboard.html';
+                    const linkTextContent = link.querySelector('span:last-child')?.textContent?.trim();
+                    const isThesisLink = linkTextContent === 'Đăng ký đề tài luận văn';
+
+                    if (isDashboardPage && isThesisLink) {
+                         link.classList.add('bg-blue-800', 'text-white'); // Apply active styles directly
+                    } else {
+                        link.classList.remove('bg-blue-800', 'text-white');
+                    }
+                });
+            }, 100); // Small delay to increase chance of sidebar being loaded
+
+        });
+
+        // Close modal if clicking outside the content
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
     </script>
 </body>
 </html> 
