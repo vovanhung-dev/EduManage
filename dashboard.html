@@ -115,7 +115,7 @@
                 </div>
 
                 <!-- Add/Edit Topic Modal -->
-                <div id="topicModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center z-50">
+                <div id="topicModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 justify-center z-50" style="display: none;">
                     <!-- Modal Content Box -->
                     <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg relative m-auto">
                         <!-- Close Button -->
@@ -331,7 +331,44 @@
             }
         }
 
-        // Load components and initial data when the DOM is ready
+        // Function to set active sidebar link based on current page filename
+        function setActiveSidebarLink() {
+            const currentFilename = window.location.pathname.split('/').pop() || 'index.html'; // Default to index if root
+            const sidebarLinks = document.querySelectorAll('#sidebar-container a');
+            
+            sidebarLinks.forEach(link => {
+                let linkHref = link.getAttribute('href');
+                if (!linkHref || linkHref === '#') {
+                     link.classList.remove('bg-blue-800', 'text-white'); // Remove active from placeholder links
+                     return;
+                 }
+                const linkFilename = linkHref.split('/').pop();
+
+                // Handle special case: dashboard.html corresponds to 'Đăng ký đề tài luận văn'
+                let isActive = false;
+                if (currentFilename === 'dashboard.html' && link.textContent.includes('Đăng ký đề tài luận văn')) {
+                    isActive = true;
+                } else if (currentFilename === 'graduation.html' && link.textContent.includes('Đăng ký xét tốt nghiệp')) {
+                     isActive = true;
+                 }
+                 // Add more else if conditions for other pages here
+                 // else if (currentFilename === 'some_other_page.html' && link.textContent.includes('Some Other Text')) {
+                 //     isActive = true;
+                 // }
+                 else {
+                     // General case: match filename
+                     isActive = linkFilename === currentFilename;
+                 }
+
+                if (isActive) {
+                    link.classList.add('bg-blue-800', 'text-white');
+                } else {
+                    link.classList.remove('bg-blue-800', 'text-white');
+                }
+            });
+        }
+
+        // DOMContentLoaded Setup
         document.addEventListener('DOMContentLoaded', async () => {
              // Load static components first
              await Promise.all([
@@ -348,31 +385,8 @@
              closeModalSpan.addEventListener('click', closeModal);
              topicForm.addEventListener('submit', saveTopic);
 
-             // Set active link in sidebar based on current page (example)
-            // Wait a bit for sidebar content to potentially load
-            setTimeout(() => {
-                const currentPath = window.location.pathname.split('/').pop() || 'dashboard.html'; // Default if path is '/' or empty
-                const sidebarLinks = document.querySelectorAll('#sidebar-container a'); // Select all links inside sidebar
-                sidebarLinks.forEach(link => {
-                    // Normalize href to match currentPath format (e.g., remove leading './')
-                    let linkHref = link.getAttribute('href');
-                    if (linkHref === '#') return; // Skip placeholder links
-                    linkHref = linkHref.replace(/^\.\//, ''); // Remove ./ if present
-
-                    // Check if the link corresponds to the current page
-                    // For this example, we assume dashboard.html is the target for 'Đăng ký đề tài luận văn'
-                    const isDashboardPage = currentPath === 'dashboard.html';
-                    const linkTextContent = link.querySelector('span:last-child')?.textContent?.trim();
-                    const isThesisLink = linkTextContent === 'Đăng ký đề tài luận văn';
-
-                    if (isDashboardPage && isThesisLink) {
-                         link.classList.add('bg-blue-800', 'text-white'); // Apply active styles directly
-                    } else {
-                        link.classList.remove('bg-blue-800', 'text-white');
-                    }
-                });
-            }, 100); // Small delay to increase chance of sidebar being loaded
-
+             // Set active link after components are likely loaded
+            setTimeout(setActiveSidebarLink, 150); // Use the updated function
         });
 
         // Close modal if clicking outside the content

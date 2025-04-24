@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xét Tốt Nghiệp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* COMMON STYLES (same as dashboard) */
+        .sidebar-link {
+            @apply flex items-center px-4 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-blue-800 hover:text-white transition duration-150 ease-in-out;
+        }
+        .sidebar-link svg, .sidebar-link span.icon {
+            @apply mr-3 h-5 w-5 flex-shrink-0;
+        }
+        .table th, .table td {
+            @apply px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider;
+        }
+        .table tbody tr:nth-child(even) {
+             background-color: #f9fafb; /* gray-50 */
+        }
+         .table td {
+             @apply text-sm text-gray-900 whitespace-nowrap;
+         }
+        /* Keep modal styles in case needed later, or remove if sure */
+        #topicModal {
+            display: none;
+        }
+         /* Custom style for the note box */
+         .note-box {
+             @apply bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-md mb-6;
+         }
+          .note-box strong {
+             @apply font-bold text-red-600;
+          }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-200">
+        <!-- Sidebar Placeholder -->
+        <div id="sidebar-container"></div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden ml-64">
+            <!-- Header Placeholder -->
+            <div id="header-container"></div>
+
+            <!-- Content Area - Updated for Graduation Registration -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="bg-white p-5 shadow rounded-md">
+                    <!-- Page Title -->
+                    <div class="border-l-4 border-blue-700 pl-3 mb-6">
+                        <h2 class="text-lg font-semibold text-gray-800">XÉT TỐT NGHIỆP</h2>
+                    </div>
+
+                    <!-- Note Box -->
+                    <div class="note-box">
+                        <p><strong>Lưu ý:</strong></p>
+                        <p>Xét tốt nghiệp</p>
+                    </div>
+
+                    <!-- No Registration Period Message -->
+                    <div class="text-center my-8">
+                        <p class="text-red-600 font-semibold">Chưa có đợt đăng ký xét tốt nghiệp</p>
+                    </div>
+
+                    <!-- Registered Periods Table -->
+                    <div class="bg-white shadow overflow-x-auto sm:rounded-lg border border-gray-200">
+                        <div class="px-4 py-3 sm:px-6 border-b border-gray-200">
+                            <h3 class="text-sm leading-6 font-medium text-red-600 border-l-2 border-red-600 pl-2">Đợt xét đã đăng ký</h3>
+                        </div>
+                        <div>
+                            <table class="min-w-full divide-y divide-gray-200 table">
+                                <thead class="bg-blue-800 text-white">
+                                    <tr>
+                                        <th scope="col" class="text-white">Đợt xét</th>
+                                        <th scope="col" class="text-white">Điện thoại</th>
+                                        <th scope="col" class="text-white">Email</th>
+                                        <th scope="col" class="text-white">Số tín chỉ tích lũy</th>
+                                        <th scope="col" class="text-white">Xóa</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                     <tr>
+                                        <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Không có dữ liệu</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Scroll-to-top button -->
+                 <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none z-40" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                 </button>
+            </main>
+        </div>
+    </div>
+
+    <!-- Re-usable script for loading components and active link logic -->
+    <script>
+        // Function to load HTML component (Sidebar, Header)
+        async function loadComponent(url, elementId) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const html = await response.text();
+                const element = document.getElementById(elementId);
+                if (element) element.innerHTML = html;
+                else console.error(`Element with id '${elementId}' not found.`);
+            } catch (error) {
+                console.error(`Error loading component ${url}:`, error);
+                const element = document.getElementById(elementId);
+                 if (element) element.innerHTML = `<p class="text-red-500 p-4">Error loading component.</p>`;
+            }
+        }
+
+        // Function to set active sidebar link based on current page filename
+        function setActiveSidebarLink() {
+            const currentFilename = window.location.pathname.split('/').pop() || 'index.html'; // Default to index if root
+            const sidebarLinks = document.querySelectorAll('#sidebar-container a');
+            
+            sidebarLinks.forEach(link => {
+                let linkHref = link.getAttribute('href');
+                if (!linkHref || linkHref === '#') {
+                     link.classList.remove('bg-blue-800', 'text-white'); // Remove active from placeholder links
+                     return;
+                 }
+                const linkFilename = linkHref.split('/').pop();
+
+                // Handle special case: dashboard.html corresponds to 'Đăng ký đề tài luận văn'
+                let isActive = false;
+                if (currentFilename === 'dashboard.html' && link.textContent.includes('Đăng ký đề tài luận văn')) {
+                    isActive = true;
+                } else if (currentFilename === 'graduation.html' && link.textContent.includes('Đăng ký xét tốt nghiệp')) {
+                     isActive = true;
+                 }
+                 // Add more else if conditions for other pages here
+                 // else if (currentFilename === 'some_other_page.html' && link.textContent.includes('Some Other Text')) {
+                 //     isActive = true;
+                 // }
+                 else {
+                     isActive = linkFilename === currentFilename;
+                 }
+
+                if (isActive) {
+                    link.classList.add('bg-blue-800', 'text-white');
+                } else {
+                    link.classList.remove('bg-blue-800', 'text-white');
+                }
+            });
+        }
+
+        // DOMContentLoaded Setup
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load static components
+            await Promise.all([
+                 loadComponent('sidebar.html', 'sidebar-container'),
+                 loadComponent('header.html', 'header-container')
+             ]);
+             
+             // Set active link after components are likely loaded
+             // Use a small delay to increase reliability
+            setTimeout(setActiveSidebarLink, 150);
+        });
+
+    </script>
+</body>
+</html> 
