@@ -25,7 +25,8 @@
              background-color: #f9fafb; /* gray-50 */
         }
          .table td {
-             @apply text-sm text-gray-900 whitespace-nowrap;
+             /* @apply text-sm text-gray-900 whitespace-nowrap; */ /* Remove whitespace-nowrap */
+             @apply text-sm text-gray-900; /* Apply only text styles */
          }
          /* Modal styles */
          .modal {
@@ -94,13 +95,13 @@
                             <table class="min-w-full divide-y divide-gray-200 table">
                                 <thead class="bg-blue-800 text-white">
                                     <tr>
-                                        <th scope="col" class="text-white w-1/12">STT</th>
-                                        <th scope="col" class="text-white w-4/12">Tên đề tài</th>
-                                        <th scope="col" class="text-white w-2/12">Từ ngày</th>
-                                        <th scope="col" class="text-white w-2/12">Đến ngày</th>
+                                        <th scope="col" class="text-white w-1/12 text-center">STT</th>
+                                        <th scope="col" class="text-white w-4/12 text-center">Tên đề tài</th>
+                                        <th scope="col" class="text-white w-2/12 text-center">Từ ngày</th>
+                                        <th scope="col" class="text-white w-2/12 text-center">Đến ngày</th>
                                         <!-- <th scope="col" class="text-white">Đăng ký</th> -->
-                                        <th scope="col" class="text-white w-1/12">Tình trạng</th>
-                                        <th scope="col" class="text-white w-2/12">Hành động</th>
+                                        <th scope="col" class="text-white w-1/12 text-center">Tình trạng</th>
+                                        <th scope="col" class="text-white w-2/12 text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody id="topicsTableBody" class="bg-white divide-y divide-gray-200">
@@ -215,7 +216,9 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                topicsData = await response.json();
+                const jsonData = await response.json(); // Fetch the entire JSON object
+                // Assuming data.json has a 'topics' key
+                topicsData = jsonData.topics || []; // Get data from the 'topics' array
                 renderTable();
             } catch (error) {
                 console.error('Error loading initial data:', error);
@@ -234,20 +237,20 @@
             topicsData.forEach((topic, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="px-4 py-3 text-sm text-gray-900">${index + 1}</td>
-                    <td class="px-4 py-3 text-sm text-gray-900 break-words w-4/12">${topic.name}</td>
-                    <td class="px-4 py-3 text-sm text-gray-900">${topic.startDate}</td>
-                    <td class="px-4 py-3 text-sm text-gray-900">${topic.endDate}</td>
-                    <td class="px-4 py-3 text-sm">
+                    <td class="px-4 py-3 text-sm text-gray-900 text-center">${index + 1}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900 break-words w-4/12 text-center">${topic.name}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900 text-center">${topic.startDate}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900 text-center">${topic.endDate}</td>
+                    <td class="px-4 py-3 text-sm text-center">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${topic.status === 'Đã đăng ký' ? 'bg-green-100 text-green-800' : topic.status === 'Đã hủy' ? 'bg-red-100 text-red-800': 'bg-yellow-100 text-yellow-800'}">
                             ${topic.status}
                         </span>
                     </td>
-                    <td class="px-4 py-3 text-sm text-gray-900 space-x-2 flex items-center">
-                        <button onclick="openEditModal(${topic.id})" class="text-indigo-600 hover:text-indigo-900" title="Sửa">
+                    <td class="px-4 py-3 text-sm text-gray-900 space-x-2 text-center">
+                        <button onclick="openEditModal(${topic.id})" class="text-indigo-600 hover:text-indigo-900 inline-block" title="Sửa">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </button>
-                        <button onclick="deleteTopic(${topic.id})" class="text-red-600 hover:text-red-900" title="Xóa">
+                        <button onclick="deleteTopic(${topic.id})" class="text-red-600 hover:text-red-900 inline-block" title="Xóa">
                              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </td>
