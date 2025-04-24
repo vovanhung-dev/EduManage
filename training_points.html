@@ -6,19 +6,16 @@
     <title>Điểm Rèn Luyện</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* COMMON STYLES (Copy from dashboard/graduation if needed) */
         .sidebar-link { @apply flex items-center px-4 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-blue-800 hover:text-white transition duration-150 ease-in-out; }
         .sidebar-link svg, .sidebar-link span.icon { @apply mr-3 h-5 w-5 flex-shrink-0; }
-        .table th, .table td { @apply px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center; } /* Center align all */
-        .table tbody tr:nth-child(even) { background-color: #fef3c7; } /* yellow-100 */
-        .table tbody tr:nth-child(odd) { background-color: #fffbeb; } /* yellow-50 */
-        .table td { @apply text-sm text-gray-900 normal-case font-normal py-3; } /* Override some defaults for td */
-        .table th { @apply text-white bg-blue-900; } /* Dark blue header */
-        .table td:first-child, .table th:first-child { @apply font-semibold; } /* Bold STT */
-        .table td:nth-child(2), .table th:nth-child(2) { @apply text-left w-6/12; } /* Left align Content, make wider */
+        .table th, .table td { @apply px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center; }
+        .table tbody tr:nth-child(even) { background-color: #fef3c7; }
+        .table tbody tr:nth-child(odd) { background-color: #fffbeb; }
+        .table td { @apply text-sm text-gray-900 normal-case font-normal py-3; }
+        .table th { @apply text-white bg-blue-900; }
+        .table td:first-child, .table th:first-child { @apply font-semibold; }
+        .table td:nth-child(2), .table th:nth-child(2) { @apply text-left w-6/12; }
         .table tfoot td { @apply font-bold bg-blue-100 text-blue-900 py-3; }
-
-        /* Tab styles */
         .tab { @apply px-4 py-2 font-medium text-sm cursor-pointer border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300; }
         .tab-active { @apply text-blue-600 border-blue-600; }
         .status-bar { @apply mt-4 mb-4 p-3 rounded-md text-sm font-medium; }
@@ -26,61 +23,50 @@
         .status-pending { @apply bg-yellow-100 text-yellow-800; }
         .status-unavailable { @apply bg-gray-100 text-gray-600; }
         .summary-box { @apply bg-red-50 text-red-800 p-3 rounded-md mb-4 text-sm; }
+
+        .styled-select {
+            border: 1px solid #a0aec0; 
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .styled-select:focus {
+            border-color: #4299e1; 
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5); 
+        }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen bg-gray-200">
-        <!-- Sidebar Placeholder -->
         <div id="sidebar-container"></div>
-
-        <!-- Main content -->
         <div class="flex-1 flex flex-col overflow-hidden ml-64">
-            <!-- Header Placeholder -->
             <div id="header-container"></div>
-
-            <!-- Content Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
                 <div class="bg-white p-5 shadow rounded-md">
-                    <!-- Page Title -->
                     <div class="border-l-4 border-red-600 pl-3 mb-6">
                         <h2 class="text-lg font-semibold text-gray-800">ĐIỂM CÁ NHÂN</h2>
                     </div>
-
-                    <!-- Filters: School Year and Semester -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div>
                             <label for="schoolYear" class="block text-sm font-medium text-gray-700 mb-1">Năm học</label>
-                            <select id="schoolYear" name="schoolYear" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                <!-- Options will be populated by JS -->
+                            <select id="schoolYear" name="schoolYear" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md styled-select">
                                 <option>2024-2025</option>
-                                <!-- Add more years if available -->
                             </select>
                         </div>
                         <div>
                             <label for="semester" class="block text-sm font-medium text-gray-700 mb-1">Học kỳ</label>
-                            <select id="semester" name="semester" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                <!-- Options will be populated by JS -->
+                            <select id="semester" name="semester" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md styled-select">
                                 <option value="HK1">Học kỳ 1</option>
                                 <option value="HK2">Học kỳ 2</option>
-                                <!-- Add more semesters if available -->
                             </select>
                         </div>
                     </div>
-
-                    <!-- Tabs -->
                     <div class="border-b border-gray-200 mb-4">
                         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                             <button id="tab-pending" class="tab">Chưa tới thời gian đánh giá điểm rèn luyện</button>
                             <button id="tab-confirmed" class="tab tab-active">Đã xác nhận</button>
                         </nav>
                     </div>
-
-                    <!-- Status Bar & Summary -->
                     <div id="statusBar" class="status-bar status-confirmed"></div>
                     <div id="summaryBox" class="summary-box"></div>
-
-
-                    <!-- Training Points Table -->
                     <div class="bg-white shadow overflow-x-auto sm:rounded-lg border border-gray-200">
                          <table class="min-w-full divide-y divide-gray-200 table">
                             <thead>
@@ -90,32 +76,25 @@
                                     <th scope="col" class="w-1/12">Điểm SV</th>
                                     <th scope="col" class="w-1/12">Điểm GV nhập</th>
                                     <th scope="col" class="w-2/12">Người nhập</th>
-                                    <th scope="col" class="w-1/12"></th> <!-- Empty header for potential icons/actions -->
+                                    <th scope="col" class="w-1/12"></th>
                                 </tr>
                             </thead>
                             <tbody id="pointsTableBody" class="divide-y divide-gray-300">
-                                <!-- Rows will be populated by JS -->
                                 <tr><td colspan="6" class="text-center py-10">Đang tải dữ liệu...</td></tr>
                             </tbody>
                             <tfoot id="pointsTableFooter">
-                                <!-- Footer row will be populated by JS -->
                             </tfoot>
                         </table>
                     </div>
                 </div>
-
-                 <!-- Scroll-to-top button -->
                  <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none z-40" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
                  </button>
             </main>
         </div>
     </div>
-
     <script>
         let allTrainingData = {};
-
-        // Function to load HTML component (Sidebar, Header)
         async function loadComponent(url, elementId) {
             try {
                 const response = await fetch(url);
@@ -132,8 +111,6 @@
                 return false;
             }
         }
-
-        // Function to load training points data from JSON
         async function loadTrainingData() {
             try {
                 const response = await fetch('data.json');
@@ -142,7 +119,6 @@
                 }
                 const jsonData = await response.json();
                 allTrainingData = jsonData.trainingPoints || {};
-                // Initial render based on default dropdown values
                 renderSelectedSemesterData();
             } catch (error) {
                 console.error('Error loading training points data:', error);
@@ -152,35 +128,25 @@
                  document.getElementById('summaryBox').textContent = '';
             }
         }
-
-        // Function to render data for the selected semester
         function renderSelectedSemesterData() {
             const year = document.getElementById('schoolYear').value;
             const semester = document.getElementById('semester').value;
             const semesterKey = `${year}_${semester}`;
             const data = allTrainingData[semesterKey];
-
             const tableBody = document.getElementById('pointsTableBody');
             const tableFooter = document.getElementById('pointsTableFooter');
             const statusBar = document.getElementById('statusBar');
             const summaryBox = document.getElementById('summaryBox');
-            tableBody.innerHTML = ''; // Clear previous data
-            tableFooter.innerHTML = ''; // Clear previous footer
-            summaryBox.textContent = ''; // Clear summary
-
+            tableBody.innerHTML = '';
+            tableFooter.innerHTML = '';
+            summaryBox.textContent = '';
             if (data) {
-                // Update Status Bar and Summary
                 statusBar.textContent = data.status || 'Không có thông tin trạng thái';
-                let statusClass = 'status-unavailable'; // Default
+                let statusClass = 'status-unavailable';
                 if (data.status === 'Đã xác nhận') statusClass = 'status-confirmed';
                 else if (data.status === 'Đang đánh giá') statusClass = 'status-pending';
-                // Add more conditions if needed
                 statusBar.className = `status-bar ${statusClass}`;
-
-                 summaryBox.textContent = `Điểm rèn luyện toàn khóa: ${data.overallScore || 'N/A'};   Xếp loại: ${data.ranking || 'N/A'}`;
-
-
-                // Populate table rows
+                summaryBox.textContent = `Điểm rèn luyện toàn khóa: ${data.overallScore || 'N/A'};   Xếp loại: ${data.ranking || 'N/A'}`;
                 if (data.details && data.details.length > 0) {
                     data.details.forEach((item) => {
                         const row = document.createElement('tr');
@@ -197,10 +163,7 @@
                 } else {
                      tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-gray-500">Không có dữ liệu chi tiết cho học kỳ này.</td></tr>`;
                 }
-
-
-                // Populate table footer
-                 tableFooter.innerHTML = `
+                tableFooter.innerHTML = `
                      <tr>
                          <td colspan="2" class="text-left font-bold">Tổng điểm đánh giá rèn luyện học kỳ:</td>
                          <td class="font-bold">${data.totalScore ?? ''}</td>
@@ -212,14 +175,12 @@
                          <td colspan="3"></td>
                      </tr>
                  `;
-
             } else {
                 tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-gray-500">Không có dữ liệu cho năm học và học kỳ đã chọn.</td></tr>`;
                 statusBar.textContent = 'Không có dữ liệu';
                 statusBar.className = 'status-bar status-unavailable';
                 summaryBox.textContent = '';
             }
-             // Update active tab based on status (simple example)
              const tabPending = document.getElementById('tab-pending');
              const tabConfirmed = document.getElementById('tab-confirmed');
              tabPending.classList.remove('tab-active');
@@ -227,19 +188,15 @@
               if (data && data.status === 'Đã xác nhận') {
                  tabConfirmed.classList.add('tab-active');
              } else {
-                 // Assume pending or unavailable maps to the first tab for now
                  tabPending.classList.add('tab-active');
              }
         }
-
-        // Central function to set active link
         function initializeSidebarActiveState() {
             const currentFilename = window.location.pathname.split('/').pop();
             const sidebarLinks = document.querySelectorAll('#sidebar-container a');
             const activeClass = 'bg-blue-800';
             const activeTextClass = 'text-white';
             const inactiveTextClass = 'text-gray-300';
-
             sidebarLinks.forEach(link => {
                 link.classList.remove(activeClass, activeTextClass);
                 if (!link.classList.contains(inactiveTextClass)) {
@@ -254,27 +211,17 @@
                 }
             });
         }
-
-        // DOMContentLoaded Setup
         document.addEventListener('DOMContentLoaded', async () => {
-             // Load components and wait for them
              const sidebarLoaded = loadComponent('sidebar.html', 'sidebar-container');
              const headerLoaded = loadComponent('header.html', 'header-container');
              await Promise.all([sidebarLoaded, headerLoaded]);
-
-            // Initialize active link AFTER sidebar is confirmed loaded
              if (await sidebarLoaded) {
                   initializeSidebarActiveState();
               }
-
-            // Load dynamic data
             await loadTrainingData();
-
-            // Add event listeners for dropdown changes
              document.getElementById('schoolYear').addEventListener('change', renderSelectedSemesterData);
              document.getElementById('semester').addEventListener('change', renderSelectedSemesterData);
         });
-
     </script>
 </body>
 </html> 

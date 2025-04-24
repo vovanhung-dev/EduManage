@@ -6,20 +6,18 @@
     <title>Đăng nhập</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Thêm CSS tùy chỉnh nếu cần */
         .form-input.error {
-            border-color: #f56565; /* red-500 */
+            border-color: #f56565;
         }
         .error-message {
-            color: #f56565; /* red-500 */
-            font-size: 0.875rem; /* text-sm */
+            color: #f56565;
+            font-size: 0.875rem;
         }
     </style>
 </head>
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
 
     <div class="text-center mb-8">
-        <!-- Logo Placeholder -->
         <img src="https://cdn.haitrieu.com/wp-content/uploads/2021/11/Logo-The-Gioi-Di-Dong-MWG-B-V.png" alt="Logo" class="mx-auto h-20 mb-4">
         <h1 class="text-xl font-semibold text-blue-800">TÊN TỔ CHỨC/TRƯỜNG HỌC</h1>
     </div>
@@ -69,14 +67,12 @@
         const passwordError = document.getElementById('passwordError');
         const credentialError = document.getElementById('credentialError');
 
-        // Hardcoded credentials
         const validUsername = 'admin';
-        const validPassword = '123456'; // Thay đổi mật khẩu nếu muốn
+        const validPassword = '123456';
 
         loginForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Ngăn form submit theo cách thông thường
+            event.preventDefault();
 
-            // Reset errors
             usernameInput.classList.remove('error');
             passwordInput.classList.remove('error');
             usernameError.classList.add('hidden');
@@ -88,40 +84,34 @@
 
             let hasError = false;
 
-            // Validate username
             if (username === '') {
                 usernameInput.classList.add('error');
                 usernameError.classList.remove('hidden');
                 hasError = true;
             }
 
-            // Validate password
             if (password === '') {
                 passwordInput.classList.add('error');
                 passwordError.classList.remove('hidden');
-                 hasError = true;
+                hasError = true;
             }
 
-            // Nếu không có lỗi validation cơ bản, kiểm tra credentials
             if (!hasError) {
                  if (username === validUsername && password === validPassword) {
-                    // alert('Đăng nhập thành công!'); // Bỏ alert
-                    // Chuyển hướng hoặc thực hiện hành động khác sau khi đăng nhập thành công
-                    window.location.href = 'dashboard.html'; // Chuyển hướng sang dashboard.html
+                    window.location.href = 'dashboard.html';
                 } else {
                     credentialError.classList.remove('hidden');
-                    passwordInput.classList.add('error'); // Có thể bôi đỏ cả 2 ô
+                    passwordInput.classList.add('error');
                     usernameInput.classList.add('error');
                 }
             }
         });
 
-        // Xóa lỗi khi người dùng bắt đầu nhập
         usernameInput.addEventListener('input', () => {
              if (usernameInput.classList.contains('error')) {
                  usernameInput.classList.remove('error');
                  usernameError.classList.add('hidden');
-                 credentialError.classList.add('hidden'); // Cũng ẩn lỗi sai credentials
+                 credentialError.classList.add('hidden');
              }
         });
 
@@ -129,7 +119,7 @@
              if (passwordInput.classList.contains('error')) {
                  passwordInput.classList.remove('error');
                  passwordError.classList.add('hidden');
-                 credentialError.classList.add('hidden'); // Cũng ẩn lỗi sai credentials
+                 credentialError.classList.add('hidden');
              }
         });
 

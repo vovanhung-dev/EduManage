@@ -7,14 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
-        /* Custom Styles (if needed, similar to grades.html title bar) */
         .title-bar { @apply border-l-4 border-blue-700 pl-3 mb-6 flex items-center; }
         .title-text { @apply text-lg font-semibold text-gray-800 mr-2; }
         .title-decoration { @apply w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-blue-700 border-b-[10px] border-b-transparent; }
-        /* Custom style for the content box background */
         .content-box {
-            background-color: #f0fff4; /* A light green similar to the image */
-            border: 1px solid #9ae6b4; /* Green border */
+            background-color: #f0fff4; 
+            border: 1px solid #9ae6b4; 
         }
         .info-label { @apply font-semibold mr-2; }
         .red-text { @apply text-red-600 font-semibold; }
@@ -24,24 +22,15 @@
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen bg-gray-200">
-        <!-- Sidebar Placeholder -->
         <div id="sidebar-container"></div>
-
-        <!-- Main content -->
         <div class="flex-1 flex flex-col overflow-hidden ml-64">
-            <!-- Header Placeholder -->
             <div id="header-container"></div>
-
-            <!-- Content Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
                 <div class="bg-white p-6 shadow-lg rounded-lg">
-                    <!-- Page Title -->
                     <div class="title-bar">
                         <h2 class="title-text">KẾT QUẢ MÔN HỌC GDQPAN</h2>
                         <div class="title-decoration"></div>
                     </div>
-
-                    <!-- Content Box from Image -->
                     <div class="content-box rounded-lg shadow-md overflow-hidden">
                          <div class="bg-blue-800 text-white font-semibold p-3 text-center">
                             KẾT QUẢ MÔN HỌC GDQPAN
@@ -88,18 +77,14 @@
                              <p><span class="info-label">6. Địa điểm nhận:</span>Phòng ITE 105 - Cơ sở 2 - Trường đại học Sư phạm Kỹ thuật TP.HCM (Số 484, đường Lê Văn Việt, phường Tăng Nhơn Phú A, TP. Thủ Đức, TP.HCM)</p>
                          </div>
                     </div>
-
                 </div>
-                 <!-- Scroll-to-top button -->
                  <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none z-40" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
                  </button>
             </main>
         </div>
     </div>
-
     <script>
-        // Load component function (reuse from grades.html or similar)
         async function loadComponent(url, elementId) {
             try {
                 const response = await fetch(url);
@@ -115,31 +100,27 @@
             }
         }
 
-       // Set active sidebar link function (adapted for this page)
         function setActiveSidebarLink() {
             const currentFilename = window.location.pathname.split('/').pop() || 'index.html';
             const sidebarLinks = document.querySelectorAll('#sidebar-container a');
             sidebarLinks.forEach(link => {
                 let linkHref = link.getAttribute('href');
                  let isActive = false;
-                // Basic check: Remove active class from all
                 link.classList.remove('bg-blue-800', 'text-white');
-                link.classList.add('text-gray-300', 'hover:bg-blue-800', 'hover:text-white'); // Ensure default styles
+                link.classList.add('text-gray-300', 'hover:bg-blue-800', 'hover:text-white');
 
                 if (linkHref && linkHref.includes('gdqpan_results.html') && currentFilename === 'gdqpan_results.html') {
                     isActive = true;
                 }
-                // Add other specific conditions from sidebar.html if needed for robustness
 
                 if (isActive) {
                     link.classList.remove('text-gray-300', 'hover:bg-blue-800', 'hover:text-white');
-                    link.classList.add('bg-blue-800', 'text-white'); // Apply active styles
+                    link.classList.add('bg-blue-800', 'text-white');
                 }
             });
-             // Special handling for the "Kết quả môn học GDQPAN" link specifically
              const gdqpanLink = Array.from(sidebarLinks).find(link => link.textContent.includes('Kết quả môn học GDQPAN'));
              if (gdqpanLink && currentFilename === 'gdqpan_results.html') {
-                 sidebarLinks.forEach(l => { // Remove active from others first
+                 sidebarLinks.forEach(l => {
                      l.classList.remove('bg-blue-800', 'text-white');
                      l.classList.add('text-gray-300', 'hover:bg-blue-800', 'hover:text-white');
                  });
@@ -148,16 +129,13 @@
              }
         }
 
-        // DOMContentLoaded Setup
         document.addEventListener('DOMContentLoaded', async () => {
             await Promise.all([
                  loadComponent('sidebar.html', 'sidebar-container'),
                  loadComponent('header.html', 'header-container')
              ]);
-            // No data loading needed for this static page
-             setTimeout(setActiveSidebarLink, 150); // Set active link after sidebar loads
+             setTimeout(setActiveSidebarLink, 150);
         });
-
     </script>
 </body>
 </html> 

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Báo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        .sidebar-link { @apply flex items-center px-4 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-blue-800 hover:text-white transition duration-150 ease-in-out; }
+        .sidebar-link svg, .sidebar-link span.icon { @apply mr-3 h-5 w-5 flex-shrink-0; }
+        .title-bar { @apply border-l-4 border-blue-700 pl-3 mb-4 flex items-center; }
+        .title-text {
+            @apply text-gray-800 mr-2;
+            font-size: 21px; 
+            font-weight: 700;   
+            letter-spacing: 0.025em;
+            margin-bottom: 0.5rem; 
+        }
+        .title-decoration { @apply w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-blue-700 border-b-[10px] border-b-transparent; }
+        .tabs-container {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb; 
+            background-color: #f9fafb; 
+            margin-bottom: 1rem; 
+        }
+        .tab {
+            padding: 0.75rem 1.5rem; 
+            font-size: 1rem; 
+            line-height: 1.5rem;
+            font-weight: 500; 
+            color: #6b7280; 
+            white-space: nowrap;
+            cursor: pointer;
+            border-bottom: 4px solid transparent; 
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+        .tab:hover {
+            color: #4b5563; 
+        }
+        .tab-active {
+            color: #1d4ed8; 
+            border-bottom-color: #ec4899; 
+            font-weight: 700; 
+        }
+        .search-container { @apply relative mb-4; }
+        .search-icon { @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400; }
+        .search-input {
+            @apply w-full pl-10 border border-gray-300 rounded-md focus:outline-none focus:border-transparent;
+            padding-top: 0.65rem;
+            padding-bottom: 0.65rem;
+            padding-right: 1rem;
+            font-size: 0.95rem;
+            background-color: #f9fafb; 
+            color: #1f2937; 
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
+        }
+        .search-input::placeholder {
+            color: #9ca3af; 
+            opacity: 1; 
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4); 
+            border-color: #3b82f6; 
+            background-color: #ffffff; 
+        }
+        .announcement-table {
+            @apply min-w-full border border-gray-300;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .announcement-table thead th {
+            @apply px-3 py-2 text-xs font-semibold text-white uppercase tracking-wider text-center;
+            background-color: #005289; 
+            border: 1px solid #004275; 
+        }
+        .announcement-table tbody tr {
+            @apply border-b border-gray-300;
+        }
+        .announcement-table tbody tr:nth-child(even) {
+            @apply bg-gray-50;
+        }
+        .announcement-table tbody tr:nth-child(odd) {
+            @apply bg-white;
+        }
+        .announcement-table tbody tr:hover {
+            @apply bg-blue-50;
+        }
+        .announcement-table tbody td {
+            @apply px-3 py-2 text-sm text-gray-800 align-middle;
+            border: 1px solid #e2e8f0;
+            padding-left: 10px;
+        }
+        .announcement-table tbody td:first-child a {
+            @apply text-blue-700 hover:text-blue-900 hover:underline font-medium;
+        }
+        .announcement-table td.sender {
+            @apply text-gray-600 text-xs;
+        }
+        .announcement-table td.time {
+            @apply text-gray-500 text-xs;
+        }
+        .announcement-table td.no-data-cell {
+            @apply p-5 text-center text-gray-500;
+            border: 1px solid #e2e8f0;
+        }
+        .announcement-table th.col-title { width: 65%; }
+        .announcement-table th.col-sender { width: 15%; }
+        .announcement-table th.col-time { width: 20%; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-200">
+        <div id="sidebar-container" class="w-64 flex-shrink-0"></div>
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <div id="header-container"></div>
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <div class="bg-white p-6 shadow-lg rounded-lg">
+                    <div class="title-bar">
+                        <h2 class="title-text">THÔNG BÁO</h2>
+                        <div class="title-decoration"></div>
+                    </div>
+                    <div class="tabs-container">
+                         <nav>
+                            <button class="tab tab-active" data-tab="general">THÔNG BÁO CHUNG</button>
+                            <button class="tab" data-tab="personal">THÔNG BÁO CÁ NHÂN</button>
+                        </nav>
+                    </div>
+                    <div class="search-container">
+                        <span class="search-icon"><i class="fas fa-search"></i></span>
+                        <input type="text" placeholder="Tìm kiếm thông báo" class="search-input">
+                    </div>
+                    <div class="overflow-x-auto mt-1">
+                        <table class="announcement-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-title text-white">Tiêu đề</th>
+                                    <th class="col-sender text-white">Người gửi</th>
+                                    <th class="col-time text-white">Thời gian gửi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="announcementsBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                 <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none z-40" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                 </button>
+            </main>
+        </div>
+    </div>
+    <script>
+        async function loadComponent(url, elementId) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const html = await response.text();
+                const element = document.getElementById(elementId);
+                if (element) element.innerHTML = html;
+                else console.error(`Element with id '${elementId}' not found.`);
+                return true;
+            } catch (error) {
+                console.error(`Error loading component ${url}:`, error);
+                const element = document.getElementById(elementId);
+                 if (element) element.innerHTML = `<p class="text-red-500 p-4">Error loading component.</p>`;
+                return false;
+            }
+        }
+        function initializeSidebarActiveState() {
+            const currentFilename = window.location.pathname.split('/').pop() || 'index.html';
+            const sidebarLinks = document.querySelectorAll('#sidebar-container a'); 
+            const activeClasses = ['bg-blue-800', 'text-white'];
+            const inactiveTextClass = 'text-gray-300';
+            sidebarLinks.forEach(link => {
+                link.classList.remove(...activeClasses);
+                 if (!link.classList.contains(inactiveTextClass) && !link.classList.contains('bg-blue-800')) { 
+                    link.classList.add(inactiveTextClass);
+                 }
+                let linkHref = link.getAttribute('href');
+                if (!linkHref || linkHref === '#') return;
+                const linkFilename = linkHref.split('/').pop();
+                 if (currentFilename === 'announcements.html' && linkFilename === 'announcements.html') {
+                     link.classList.remove(inactiveTextClass);
+                     link.classList.add(...activeClasses);
+                 } else if (linkFilename === currentFilename && currentFilename !== 'announcements.html') {
+                     link.classList.remove(inactiveTextClass);
+                     link.classList.add(...activeClasses);
+                 } else if (linkFilename === '' && currentFilename === 'index.html') {
+                     link.classList.remove(inactiveTextClass);
+                     link.classList.add(...activeClasses);
+                 }
+            });
+        }
+         function setupTabs() {
+             const tabs = document.querySelectorAll('.tab');
+             const tableBody = document.getElementById('announcementsBody');
+             tabs.forEach(tab => {
+                 tab.addEventListener('click', () => {
+                     tabs.forEach(t => t.classList.remove('tab-active'));
+                     tab.classList.add('tab-active');
+                     const tabType = tab.getAttribute('data-tab');
+                     console.log(`Switched to tab: ${tabType}`);
+                     tableBody.innerHTML = `<tr><td colspan="3" class="no-data-cell">Đang tải...</td></tr>`;
+                     loadAnnouncements(tabType);
+                 });
+             });
+         }
+         async function loadAnnouncements(type = 'general') {
+             console.log(`Loading ${type} announcements...`);
+             const tableBody = document.getElementById('announcementsBody');
+             tableBody.innerHTML = ''; 
+             const placeholderData = [
+                 { title: 'Thông báo Thời gian nhận bằng tốt nghiệp đại học hệ chính quy đợt tháng 12/2024 có Quyết định tốt nghiệp tháng 1/2025', sender: 'quynhdt', time: '21/03/2025<br>18:32:52' },
+                 { title: 'Danh sách Sinh viên dự kiến được công nhận tốt nghiệp - đợt 3 - Tháng 03/2025 (Có QĐTN Tháng 4/2025)* cập nhật ngày 14/03/2025', sender: 'quynhdt', time: '14/03/2025<br>18:38:09' },
+                 { title: 'Danh sách Sinh viên dự kiến Cảnh báo kết quả học tập và buộc thôi học học kỳ 2/2024 2025', sender: 'quynhdt', time: '17/03/2025<br>18:52:04' },
+                 { title: 'Danh sách Sinh viên được/không được công nhận tốt nghiệp đợt 3 - Tháng 3/2025 (Có Quyết định tốt nghiệp Tháng 4/2025).', sender: 'quynhdt', time: '31/03/2025<br>14:50:21' },
+                 { title: 'Danh sách sinh viên dự kiến được công nhận tốt nghiệp đợt 3 - Tháng 3/2025 có Quyết định TN tháng 04/2025 cập nhật ngày 21/03/2025.', sender: 'quynhdt', time: '21/03/2025<br>20:00:10' },
+                 { title: 'Thông báo nhắc thời gian nhận "Đơn xin miễn học thay thế, Miễn/Chuyển điểm Ngoại ngữ, Anh văn đầu ra học kỳ 2/2024 2025 đợt 2 từ ngày 14-20/04/2025.', sender: 'quynhdt', time: '11/04/2025<br>14:33:05' },
+                 { title: 'Trường Đại học Sư phạm Kỹ thuật Thành phố Hồ Chí Minh trân trọng thông báo về việc đăng ký dự Lễ tốt nghiệp dành cho Nghiên cứu sinh, Học viên cao học tốt nghiệp tháng 04/2025 trở về trước và Sinh viên đại học chính quy tốt nghiệp tháng 01/04/2025.', sender: 'hanhptt', time: '23/04/2025<br>17:52:14' },
+                 { title: 'Thông báo về lịch thi kiểm tra trình độ tiếng Anh đầu ra đợt thi tháng 01 năm 2025', sender: 'hanhptt', time: '08/01/2025<br>16:37:09' },
+                 { title: 'Thông báo Quyết định V/v thay thế phụ lục II Quy định chuyển điểm đối với chứng chỉ tiếng Nhật theo quy định 2930/QĐ-ĐHSPKT ngày 12/10/2020', sender: 'quynhdt', time: '23/12/2024<br>19:45:25' },
+                 { title: 'TTThông báo về việc xét tốt nghiệp đại học chính quy đợt 3 năm học 2024 2025', sender: 'quynhdt', time: '14/02/2025<br>21:59:37' },
+                 { title: 'Thông báo xét Tốt nghiệp Đại học Chính quy đợt 1 năm họcThông báo về việc xét Cảnh báo học tập, Buộc thôi học học kỳ 2/2024 2025', sender: 'quynhdt', time: '06/03/2025<br>18:37:07' },
+                 { title: 'Thông báo về việc triển khai nhận đơn xin học môn thay thế trên trang Online của Trường', sender: 'hanhptt', time: '14/02/2025<br>22:03:04' },
+                 { title: 'Thông báo v/v đăng ký thi kiểm tra trình độ tiếng Anh đầu ra đợt tháng 01/2025', sender: 'hanhptt', time: '12/12/2024<br>12:10:26' },
+                 { title: 'Danh sách Sinh viên đã đăng ký xét tốt nghiệp đợt 2 - Tháng 12/2024', sender: 'quynhdt', time: '02/12/2024<br>17:57:52' },
+                 { title: 'Danh sách Sinh viên được công nhận tốt nghiệp lần 2 - đợt 2 - Tháng 12/2024 (Có QĐTN Tháng 1/2025) và Thông báo nộp lệ phí làm bằng tốt nghiệp chính quy đợt 2 năm học 2024 2025', sender: 'quynhdt', time: '26/12/2024<br>10:34:33' },
+                 { title: 'Danh sách Sinh viên được miễn ngoại ngữ đầu ra học kỳ 1 năm học 2024 2025 (đợt tháng 11/2024)', sender: 'quynhdt', time: '22/12/2024<br>12:58:47' },
+                 { title: 'Danh sách Sinh viên dự kiến được công nhận tốt nghiệp lần 1 - đợt 2 - Tháng 12/2024 (Có QĐTN Tháng 1/2025)', sender: 'quynhdt', time: '14/12/2024<br>17:07:28' },
+                 { title: 'Thông báo lịch thi kiểm tra trình độ tiếng Anh đầu ra đợt thi tháng 01/2025', sender: 'hanhptt', time: '12/12/2024<br>12:14:21' },
+                 { title: 'Thông báo v/v kế hoạch đăng ký và chỉnh sửa học phần qua mạng học kỳ II năm học 2024 - 2025 (dành cho sv chính quy hệ đại trà và chất lượng cao Tiếng Việt)', sender: 'quynhdt', time: '23/12/2024<br>13:13:36' },
+                 { title: 'Thông báo Thời gian nhận bằng tốt nghiệp đại học hệ chính quy đợt tháng 10/2024 chưa nhận theo kế hoạch phát lần 1', sender: 'quynhdt', time: '18/12/2024<br>20:14:28' },
+                 { title: 'Danh sách sinh viên Dự kiến được công nhận tốt nghiệp đợt 2 Tháng 12/2024 cập nhật ngày 22/12/2024 (Dự kiến có QĐTN tháng 01/2025).', sender: 'quynhdt', time: '22/12/2024<br>11:50:28' },
+                 { title: 'Thông báo Thời gian nhận chứng chỉ ngoại ngữ để chuyển điểm và miễn ngoại ngữ đầu ra học kỳ 2,3 năm học 2024 2025', sender: 'quynhdt', time: '31/12/2024<br>14:11:09' },
+                 { title: 'Thông báo về việc triển khai nhận đơn xin học môn thay thế trên trang Online của Trường', sender: 'hanhptt', time: '14/02/2025<br>22:07:46' },
+                 { title: 'Danh sách Sinh viên đã đăng ký XTN tháng 03/2025 Ngày 03 - 03 - 2025.', sender: 'quynhdt', time: '03/03/2025<br>10:28:01' }
+             ];
+              if (type === 'personal') {
+                   tableBody.innerHTML = `<tr><td colspan="3" class="no-data-cell">Không có thông báo cá nhân nào.</td></tr>`;
+              } else if (placeholderData.length > 0) {
+                  placeholderData.forEach(item => {
+                      const row = tableBody.insertRow();
+                      row.innerHTML = `
+                          <td><a href="#">${item.title}</a></td> 
+                          <td class="sender">${item.sender}</td> 
+                          <td class="time">${item.time}</td> 
+                      `;
+                  });
+              } else {
+                  tableBody.innerHTML = `<tr><td colspan="3" class="no-data-cell">Không có thông báo chung nào.</td></tr>`;
+              }
+         }
+        document.addEventListener('DOMContentLoaded', async () => {
+            const sidebarLoaded = loadComponent('sidebar.html', 'sidebar-container');
+            const headerLoaded = loadComponent('header.html', 'header-container');
+            await Promise.all([sidebarLoaded, headerLoaded]);
+            if (await sidebarLoaded) {
+                initializeSidebarActiveState();
+            } else {
+                 console.error("Sidebar failed to load, cannot initialize active state.");
+            }
+            setupTabs(); 
+            loadAnnouncements('general');
+        });
+    </script>
+</body>
+</html> 

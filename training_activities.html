@@ -6,7 +6,6 @@
     <title>Đăng Ký Tham Gia Hoạt Động Rèn Luyện</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* COMMON STYLES (Using Tailwind @apply for layout/non-table elements) */
         .sidebar-link { @apply flex items-center px-4 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-blue-800 hover:text-white transition duration-150 ease-in-out; }
         .sidebar-link svg, .sidebar-link span.icon { @apply mr-3 h-5 w-5 flex-shrink-0; }
         label { @apply block text-sm font-medium text-gray-700 mb-1; }
@@ -15,108 +14,95 @@
         .title-text { @apply text-lg font-semibold text-gray-800 mr-2; }
         .title-decoration { @apply w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-blue-700 border-b-[10px] border-b-transparent; }
 
-        /* Pure CSS for Table Styling */
         .table-container {
              background-color: white;
              box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
              overflow-x: auto;
-             border-radius: 0.375rem; /* sm:rounded-lg */
-             border: 1px solid #e5e7eb; /* border-gray-200 */
-             margin-top: 1rem; /* mt-4 */
+             border-radius: 0.375rem;
+             border: 1px solid #e5e7eb;
+             margin-top: 1rem;
         }
         .table-title {
-             padding: 0.5rem 1.5rem; /* px-4 py-2 sm:px-6 */
-             border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
-             font-weight: 600; /* font-semibold */
-             color: #b91c1c; /* text-red-700 */
-             font-size: 0.875rem; /* text-sm */
+             padding: 0.5rem 1.5rem;
+             border-bottom: 1px solid #e5e7eb;
+             font-weight: 600;
+             color: #b91c1c;
+             font-size: 0.875rem;
         }
         .table {
             min-width: 100%;
             border-collapse: collapse;
         }
         .table th {
-             padding: 0.5rem 0.75rem; /* px-3 py-2 */
-             font-size: 0.75rem; /* text-xs */
-             font-weight: 500; /* font-medium */
+             padding: 0.5rem 0.75rem;
+             font-size: 0.75rem;
+             font-weight: 500;
              color: white;
              text-transform: uppercase;
-             letter-spacing: 0.05em; /* tracking-wider */
-             background-color: #1e3a8a; /* bg-blue-900 */
+             letter-spacing: 0.05em;
+             background-color: #1e3a8a;
              text-align: center;
-             border-bottom: 1px solid #e5e7eb; /* Add border between header and body */
-             border-right: 1px solid #e5e7eb; /* Add right border */
+             border-bottom: 1px solid #e5e7eb;
+             border-right: 1px solid #e5e7eb;
         }
         .table td {
-             padding: 0.5rem 0.75rem; /* px-3 py-2 */
-             font-size: 0.875rem; /* text-sm */
-             color: #111827; /* text-gray-900 */
+             padding: 0.5rem 0.75rem;
+             font-size: 0.875rem;
+             color: #111827;
              text-align: center;
              white-space: normal;
-             border-right: 1px solid #e5e7eb; /* border-r border-gray-200 */
+             border-right: 1px solid #e5e7eb;
              vertical-align: middle;
         }
         .table th:last-child,
         .table td:last-child {
-            border-right: none; /* border-r-0 */
+            border-right: none;
         }
         .table tbody tr {
-            border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+            border-bottom: 1px solid #e5e7eb;
         }
         .table tbody tr:nth-child(even) {
-             background-color: #f9fafb; /* gray-50 */
+             background-color: #f9fafb;
         }
         .table tbody tr:nth-child(odd) {
-             background-color: #ffffff; /* white */
+             background-color: #ffffff;
         }
         .table tbody tr:last-child {
-             border-bottom: none; /* No bottom border for the last row */
+             border-bottom: none;
         }
         .table td.content-cell {
             text-align: left;
         }
         .table td.status-cell {
-            font-size: 0.75rem; /* text-xs */
+            font-size: 0.75rem;
         }
         .table td.checkbox-cell input {
-            height: 1rem; /* h-4 */
-            width: 1rem; /* w-4 */
-            color: #4f46e5; /* text-indigo-600 */
-            border-color: #d1d5db; /* border-gray-300 */
-            border-radius: 0.25rem; /* rounded */
-             /* Add focus styles if needed */
-             /* &:focus { ring: 2px solid #6366f1; } */
+            height: 1rem;
+            width: 1rem;
+            color: #4f46e5;
+            border-color: #d1d5db;
+            border-radius: 0.25rem;
         }
         .table td.no-data-cell {
-            padding: 1.25rem; /* py-5 */
+            padding: 1.25rem;
             text-align: center;
             border-right: none;
         }
 
-        /* Other styles remain using @apply or direct classes */
         .filter-container { @apply border border-gray-200 rounded-md p-4; }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen bg-gray-200">
-        <!-- Sidebar Placeholder -->
         <div id="sidebar-container"></div>
-
-        <!-- Main content -->
         <div class="flex-1 flex flex-col overflow-hidden ml-64">
-            <!-- Header Placeholder -->
             <div id="header-container"></div>
-
-            <!-- Content Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
                 <div class="bg-white p-5 shadow rounded-md">
-                    <!-- Page Title -->
                     <div class="border-l-4 border-blue-700 pl-3 mb-6 flex items-center">
                         <h2 class="text-lg font-semibold text-gray-800 mr-2">ĐĂNG KÝ THAM GIA HOẠT ĐỘNG RÈN LUYỆN</h2>
                         <div class="w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-blue-700 border-b-[10px] border-b-transparent"></div>
                     </div>
-
-                    <!-- Filters: School Year and Semester -->
                     <div class="filter-container">
                          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                              <div>
@@ -134,18 +120,16 @@
                              </div>
                          </div>
                     </div>
-
-                    <!-- Training Activities Table -->
                     <div class="table-container">
                          <h3 class="table-title">Đăng ký tham gia hoạt động rèn luyện</h3>
                          <table class="min-w-full table">
                             <thead>
                                 <tr>
-                                    <th style="width: 8.33%;">STT</th> <!-- w-1/12 -->
-                                    <th style="width: 41.67%;">Hoạt động</th> <!-- w-5/12 -->
-                                    <th style="width: 25%;">Thời gian - địa điểm</th> <!-- w-3/12 -->
-                                    <th style="width: 16.67%;">Trạng thái</th> <!-- w-2/12 -->
-                                    <th style="width: 8.33%;">Chọn</th> <!-- w-1/12 -->
+                                    <th style="width: 8.33%;">STT</th>
+                                    <th style="width: 41.67%;">Hoạt động</th>
+                                    <th style="width: 25%;">Thời gian - địa điểm</th>
+                                    <th style="width: 16.67%;">Trạng thái</th>
+                                    <th style="width: 8.33%;">Chọn</th>
                                 </tr>
                             </thead>
                             <tbody id="activitiesTableBody">
@@ -154,20 +138,15 @@
                         </table>
                     </div>
                 </div>
-
-                 <!-- Scroll-to-top button -->
                  <button class="fixed bottom-5 right-5 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full shadow-lg focus:outline-none z-40" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
                  </button>
             </main>
         </div>
     </div>
-
     <script>
         let allActivitiesData = {};
-
-        // Load component function (reuse)
-        async function loadComponent(url, elementId) { /* ... same as other pages ... */
+        async function loadComponent(url, elementId) {
              try {
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -183,35 +162,28 @@
                 return false;
             }
         }
-
-        // Load activities data from JSON
         async function loadActivitiesData() {
             try {
                 const response = await fetch('data.json');
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const jsonData = await response.json();
                 allActivitiesData = jsonData.trainingActivities || {};
-                renderActivitiesTable(); // Initial render
+                renderActivitiesTable();
             } catch (error) {
                 console.error('Error loading activities data:', error);
                  document.getElementById('activitiesTableBody').innerHTML = `<tr><td colspan="5" class="no-data-cell text-red-500">Lỗi tải dữ liệu.</td></tr>`;
             }
         }
-
-        // Render table based on selected semester
         function renderActivitiesTable() {
             const year = document.getElementById('schoolYear').value;
             const semester = document.getElementById('semester').value;
             const semesterKey = `${year}_${semester}`;
             const activities = allActivitiesData[semesterKey] || [];
-
             const tableBody = document.getElementById('activitiesTableBody');
             tableBody.innerHTML = '';
-
             if (activities.length > 0) {
                 activities.forEach((activity) => {
                     const row = tableBody.insertRow();
-                    // Use explicit cell classes where needed
                     row.innerHTML = `
                         <td>${activity.stt}</td>
                         <td class="content-cell">${activity.activity}</td>
@@ -224,15 +196,12 @@
                 tableBody.innerHTML = `<tr><td colspan="5" class="no-data-cell text-gray-500">Không có hoạt động nào cho học kỳ này.</td></tr>`;
             }
         }
-
-        // Central function to set active link
         function initializeSidebarActiveState() {
             const currentFilename = window.location.pathname.split('/').pop();
             const sidebarLinks = document.querySelectorAll('#sidebar-container a');
             const activeClass = 'bg-blue-800';
             const activeTextClass = 'text-white';
             const inactiveTextClass = 'text-gray-300';
-
             sidebarLinks.forEach(link => {
                 link.classList.remove(activeClass, activeTextClass);
                 if (!link.classList.contains(inactiveTextClass)) {
@@ -247,24 +216,17 @@
                 }
             });
         }
-
-        // DOMContentLoaded Setup
         document.addEventListener('DOMContentLoaded', async () => {
-             // Load components and wait for them
              const sidebarLoaded = loadComponent('sidebar.html', 'sidebar-container');
              const headerLoaded = loadComponent('header.html', 'header-container');
              await Promise.all([sidebarLoaded, headerLoaded]);
-
-            // Initialize active link AFTER sidebar is confirmed loaded
              if (await sidebarLoaded) {
                   initializeSidebarActiveState();
               }
-
             await loadActivitiesData();
             document.getElementById('schoolYear').addEventListener('change', renderActivitiesTable);
             document.getElementById('semester').addEventListener('change', renderActivitiesTable);
         });
-
     </script>
 </body>
 </html> 

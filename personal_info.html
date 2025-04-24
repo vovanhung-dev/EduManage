@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Tin Sinh Viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 14px;
+            line-height: 1.5;
+            background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
+            color: #1f2937; /* Default text color */
+            height: 100vh;
+            overflow: hidden; /* Prevent body scroll when content fits */
+        }
+
+        a {
+            color: #2563eb; /* Blue-600 */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Layout */
+        .page-container {
+            display: flex;
+            height: 100vh;
+            background-color: #e5e7eb; /* bg-gray-200 */
+        }
+
+        #sidebar-container {
+            /* Assuming sidebar width is fixed, adjust if necessary */
+            width: 256px; /* Equivalent to ml-64 */
+            flex-shrink: 0;
+        }
+
+        .main-content-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #header-container {
+            flex-shrink: 0;
+            /* Styles for header content will be loaded */
+        }
+
+        .content-area {
+            flex-grow: 1;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background-color: #f3f4f6; /* bg-gray-100 */
+            padding: 1rem; /* p-4 */
+        }
+
+        /* Page Header */
+        .page-header {
+            background-color: #1d4ed8; /* bg-blue-700 */
+            color: white;
+            font-weight: 700;
+            padding: 0.5rem; /* p-2 */
+            display: flex;
+            align-items: center;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 20px 50%);
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .page-header h2 {
+            font-size: 1rem; /* text-base */
+            padding-left: 0.5rem; /* px-2 */
+            padding-right: 0.5rem;
+        }
+
+        /* Grid Layout */
+        .main-grid {
+            display: grid;
+            gap: 1rem; /* gap-4 */
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .main-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+            .grid-col-span-1 {
+                grid-column: span 1 / span 1;
+            }
+            .grid-col-span-2 {
+                grid-column: span 2 / span 2;
+            }
+        }
+
+        /* Profile Card */
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem; /* p-4 */
+            background-color: white;
+            border: 1px solid #e5e7eb; /* border border-gray-200 */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .profile-pic {
+            width: 6rem; /* w-24 */
+            height: 6rem; /* h-24 */
+            border-radius: 9999px; /* rounded-full */
+            object-fit: cover;
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        .profile-name {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            color: #111827; /* text-gray-900 */
+        }
+        .remove-pic-btn {
+            font-size: 0.75rem; /* text-xs */
+            color: #2563eb; /* text-blue-600 */
+            cursor: pointer;
+            margin-top: 0.25rem; /* mt-1 */
+            background: none;
+            border: none;
+        }
+        .remove-pic-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Section Card */
+        .section-card {
+            background-color: white;
+            margin-bottom: 1rem; /* mb-4 */
+            border: 1px solid #e5e7eb; /* border border-gray-200 */
+        }
+        .section-card h3 {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            color: #374151; /* text-gray-700 */
+            background-color: #f9fafb; /* bg-gray-50 */
+            padding: 0.5rem; /* p-2 */
+            border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+        }
+
+        /* Info Table */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table td {
+            border: 1px solid #e5e7eb; /* border border-gray-200 */
+            padding: 0.5rem; /* p-2 */
+            font-size: 0.875rem; /* text-sm */
+            vertical-align: middle;
+        }
+        .info-table td:first-child {
+            background-color: #f9fafb; /* bg-gray-50 */
+            font-weight: 500; /* font-medium */
+            color: #6b7280; /* text-gray-500 */
+            width: 33.333333%; /* w-1/3 */
+        }
+        .info-table td:last-child {
+            color: #1f2937; /* text-gray-800 */
+            text-align: left; /* Default */
+        }
+
+        /* Update Button */
+        .update-button-container {
+            padding: 0.5rem; /* p-2 */
+            text-align: center;
+        }
+        .update-button {
+            background-color: #2563eb; /* bg-blue-600 */
+            color: white;
+            font-size: 0.75rem; /* text-xs */
+            padding: 0.25rem 0.5rem; /* px-2 py-1 */
+            border: none;
+            border-radius: 0.25rem; /* rounded */
+            cursor: pointer;
+            transition: background-color 0.15s ease-in-out;
+        }
+        .update-button:hover {
+            background-color: #1d4ed8; /* hover:bg-blue-700 */
+        }
+        .update-button i {
+            margin-right: 0.25rem; /* mr-1 */
+        }
+
+        /* Chart Section */
+        .chart-section {
+             margin-bottom: 1rem; /* mb-4 */
+        }
+        .dropdown-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem; /* mb-4 */
+            padding: 0.5rem; /* p-2 */
+            gap: 0.5rem; /* gap-2 */
+            border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+        }
+        .dropdown-container label {
+            display: block;
+            font-size: 0.75rem; /* text-xs */
+            color: #6b7280; /* text-gray-500 */
+            margin-bottom: 0.25rem; /* mb-1 */
+        }
+        .dropdown-container select {
+            display: block;
+            width: 100%;
+            padding: 0.25rem 1rem 0.25rem 0.5rem; /* pl-2 pr-4 py-1 */
+            font-size: 0.75rem; /* text-xs */
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.25rem; /* rounded */
+            appearance: none; /* Basic reset */
+            background-color: #fff;
+             /* Add background image for arrow if needed */
+        }
+         .dropdown-group {
+             display: flex;
+             gap: 0.5rem; /* gap-2 */
+         }
+
+        .chart-grid {
+            display: grid;
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .chart-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        .chart-item {
+            padding: 0.5rem; /* p-2 */
+        }
+         .chart-item:first-child {
+              border-right: 1px solid #e5e7eb; /* border-r */
+          }
+          @media (max-width: 767px) { /* Below md */
+              .chart-item:first-child {
+                  border-right: none;
+                  border-bottom: 1px solid #e5e7eb;
+              }
+          }
+
+        .chart-item h4 {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            margin-bottom: 0.25rem; /* mb-1 */
+            color: #374151; /* text-gray-700 */
+        }
+        .chart-subtitle {
+             font-size: 0.75rem; /* text-xs */
+             color: #6b7280; /* text-gray-500 */
+             margin-bottom: 0.25rem; /* mb-1 */
+         }
+        .chart-container {
+            height: 16rem; /* h-64 */
+            position: relative; /* Needed for Chart.js responsiveness */
+        }
+        .chart-container canvas {
+             display: block;
+             max-width: 100%;
+             height: auto;
+        }
+
+
+        /* Contact & Course Grid */
+        .contact-course-grid {
+            display: grid;
+            gap: 1rem; /* gap-4 */
+        }
+         @media (min-width: 768px) { /* md breakpoint */
+            .contact-course-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        /* Emergency Contact */
+         .emergency-contact-card {
+             margin-top: 1rem; /* mt-4 */
+         }
+
+        /* Sidebar Link styles (basic example, might be loaded from sidebar.html) */
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.625rem 1rem; /* px-4 py-2.5 */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            color: #d1d5db; /* text-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+        }
+        .sidebar-link:hover {
+            background-color: #1e40af; /* hover:bg-blue-800 */
+            color: white; /* hover:text-white */
+            text-decoration: none;
+        }
+        .sidebar-link svg, .sidebar-link span.icon {
+            margin-right: 0.75rem; /* mr-3 */
+            height: 1.25rem; /* h-5 */
+            width: 1.25rem; /* w-5 */
+            flex-shrink: 0;
+        }
+        .sidebar-link.active {
+             background-color: #1e40af; /* bg-blue-800 */
+             color: white; /* text-white */
+         }
+
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="page-container flex bg-gray-200">
+        <!-- Sidebar Placeholder -->
+        <div id="sidebar-container" class="w-64"></div>
+
+        <!-- Main content -->
+        <div class="main-content-wrapper flex-1 flex flex-col overflow-hidden">
+            <!-- Header Placeholder -->
+            <div id="header-container"></div>
+
+            <!-- Content Area -->
+            <main class="content-area flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
+                <!-- Page Title -->
+                <div class="page-header">
+                    <h2>THÔNG TIN SINH VIÊN</h2>
+                </div>
+
+                <div class="main-grid grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <!-- Left Column -->
+                    <div class="grid-col-span-1 lg:col-span-1">
+                        <!-- Profile Card -->
+                        <div class="profile-card">
+                            <img id="profilePic" class="profile-pic" src="https://i.pravatar.cc/150?u=22110002" alt="Ảnh đại diện">
+                            <p id="studentNamePic" class="profile-name">Lâm Quang Hồ</p>
+                            <button class="remove-pic-btn">Remove Picture</button>
+                        </div>
+
+                        <!-- Student Info Card -->
+                        <div class="section-card">
+                            <h3>Thông tin sinh viên</h3>
+                            <table class="info-table">
+                                <tr>
+                                    <td>Mã sinh viên</td>
+                                    <td id="studentId">22110002</td>
+                                </tr>
+                                <tr>
+                                    <td>Họ tên</td>
+                                    <td id="studentName">Lâm Quang Hồ</td>
+                                </tr>
+                                <tr>
+                                    <td>Ngày sinh</td>
+                                    <td id="studentDob">24/06/2003</td>
+                                </tr>
+                                <tr>
+                                    <td>Nơi sinh</td>
+                                    <td id="studentPob">Bình Thuận</td>
+                                </tr>
+                                <tr>
+                                    <td>Giới tính</td>
+                                    <td id="studentGender">Nam</td>
+                                </tr>
+                                <tr>
+                                    <td>CMND/CCCD</td>
+                                    <td id="studentIdCard">060203007640</td>
+                                </tr>
+                                <tr>
+                                    <td>Dân tộc</td>
+                                    <td id="studentEthnicity">Chăm</td>
+                                </tr>
+                                <tr>
+                                    <td>Tôn giáo</td>
+                                    <td id="studentReligion">Ba Ni</td>
+                                </tr>
+                                <tr>
+                                    <td>Lớp sinh viên</td>
+                                    <td id="studentClass">2211OST1C</td>
+                                </tr>
+                            </table>
+                            <div class="update-button-container">
+                                <button class="update-button">
+                                    <i class="fas fa-pencil-alt"></i> Cập nhật thông tin cá nhân
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="grid-col-span-2 lg:col-span-2">
+                        <!-- Chart Section -->
+                        <div class="section-card chart-section">
+                            <div class="dropdown-container">
+                                <div>
+                                    <label for="trainingProgramSelect">Chương trình đào tạo</label>
+                                    <select id="trainingProgramSelect">
+                                        <option>22110_Công nghệ phần mềm</option>
+                                        <!-- Add other options if necessary -->
+                                    </select>
+                                </div>
+                                <div class="dropdown-group">
+                                    <div>
+                                        <label for="schoolYearSelect">Năm học</label>
+                                        <select id="schoolYearSelect">
+                                            <option>2024-2025</option>
+                                            <option>2023-2024</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="semesterSelect">Học kỳ</label>
+                                        <select id="semesterSelect">
+                                            <option>Học kỳ 2</option>
+                                            <option>Học kỳ 1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-grid grid md:grid-cols-2">
+                                <div class="chart-item">
+                                    <h4>Kết quả học tập</h4>
+                                    <div class="chart-container">
+                                        <canvas id="gradesChart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="chart-item">
+                                    <h4>Tiến độ học tập</h4>
+                                    <div class="chart-subtitle">Tổng số tín chỉ: 154.0</div>
+                                    <div class="chart-container">
+                                        <canvas id="progressChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact & Course Info -->
+                        <div class="contact-course-grid grid md:grid-cols-2 gap-4">
+                            <!-- Contact Info -->
+                            <div class="section-card">
+                                <h3>Thông tin liên lạc</h3>
+                                <table class="info-table">
+                                    <tr>
+                                        <td>Quốc gia</td>
+                                        <td id="contactCountry">Vietnam</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tỉnh/Thành</td>
+                                        <td id="contactProvince">Bình Thuận</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Quận/Huyện</td>
+                                        <td id="contactDistrict">H Bắc Bình</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phường/Xã</td>
+                                        <td id="contactWard">phan hòa</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Địa chỉ</td>
+                                        <td id="contactAddress">503 Bình Minh Phan Hòa Bắc Bình Bình Thuận</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Di động</td>
+                                        <td id="contactMobile"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email trường</td>
+                                        <td id="contactSchoolEmail">22110002@student.hcmute.edu.vn</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email cá nhân</td>
+                                        <td id="contactPersonalEmail">holam24062003@gmail.com</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- Course Info -->
+                            <div class="section-card">
+                                <h3>Thông tin khóa học</h3>
+                                <table class="info-table">
+                                    <tr>
+                                        <td>Khóa học</td>
+                                        <td id="courseYear">Khóa 2022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày nhập học</td>
+                                        <td id="courseStartDate">29/09/2022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Loại hình đào tạo</td>
+                                        <td id="courseType">Chính quy (CN)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Chương trình đào tạo</td>
+                                        <td id="courseProgram">22110_Công nghệ phần mềm</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Khoa</td>
+                                        <td id="courseFaculty">Công nghệ Thông tin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngành</td>
+                                        <td id="courseMajor">Công nghệ thông tin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Niên khóa</td>
+                                        <td id="courseDuration">2022 - 2026</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Năm hết thời gian đào tạo</td>
+                                        <td id="courseEndDate">2022 - 2030</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                
+                        <!-- Emergency Contact Info -->
+                        <div class="section-card emergency-contact-card">
+                            <h3>Thông tin người liên hệ</h3>
+                            <table class="info-table">
+                                <tr>
+                                    <td>Họ tên người liên hệ</td>
+                                    <td id="emergencyContactName">Lâm Thị Thu Hà</td>
+                                </tr>
+                                <tr>
+                                    <td>Địa chỉ người liên hệ</td>
+                                    <td id="emergencyContactAddress">503, thôn Bình Minh</td>
+                                </tr>
+                                <tr>
+                                    <td>Điện thoại người liên hệ</td>
+                                    <td id="emergencyContactPhone">0582133102</td>
+                                </tr>
+                                <tr>
+                                    <td>Họ tên cha</td>
+                                    <td id="fatherName">Lâm Văn Trong</td>
+                                </tr>
+                                <tr>
+                                    <td>Điện thoại cha</td>
+                                    <td id="fatherPhone">0362399021</td>
+                                </tr>
+                                <tr>
+                                    <td>Họ tên mẹ</td>
+                                    <td id="motherName">Nguyễn Thị Lợi</td>
+                                </tr>
+                                <tr>
+                                    <td>Điện thoại mẹ</td>
+                                    <td id="motherPhone">0823697168</td>
+                                </tr>
+                            </table>
+                        </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Load component function (reuse)
+        async function loadComponent(url, elementId) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const html = await response.text();
+                const element = document.getElementById(elementId);
+                if (element) element.innerHTML = html;
+                else console.error(`Element with id '${elementId}' not found.`);
+                return true;
+            } catch (error) {
+                console.error(`Error loading component ${url}:`, error);
+                const element = document.getElementById(elementId);
+                 if (element) element.innerHTML = `<p class="text-red-500 p-4">Error loading component.</p>`; // Use Tailwind class for error msg
+                return false;
+            }
+        }
+
+        // Central function to set active link - Uses Tailwind classes directly
+        function initializeSidebarActiveState() {
+            const currentFilename = window.location.pathname.split('/').pop() || 'index.html';
+            // Select all anchor tags within the sidebar container
+            const sidebarLinks = document.querySelectorAll('#sidebar-container a');
+            const activeClasses = ['bg-blue-800', 'text-white']; // Tailwind active classes
+            const inactiveTextClass = 'text-gray-300'; // Tailwind inactive text class
+
+            sidebarLinks.forEach(link => {
+                // Remove active classes and ensure inactive text class is present initially
+                link.classList.remove(...activeClasses);
+                if (!link.classList.contains(inactiveTextClass)) {
+                    link.classList.add(inactiveTextClass);
+                }
+
+                let linkHref = link.getAttribute('href');
+                if (!linkHref || linkHref === '#') return; // Skip links without href
+
+                const linkFilename = linkHref.split('/').pop();
+
+                // Check if the link's filename matches the current page's filename
+                if (linkFilename === currentFilename || (currentFilename === 'index.html' && linkFilename === '')) {
+                    link.classList.remove(inactiveTextClass);
+                    link.classList.add(...activeClasses);
+                }
+            });
+        }
+
+
+        // Function to load student data (Placeholder)
+        async function loadStudentData() {
+            console.log('Loading student data...');
+            // Data population would happen here in a real app
+            initializeCharts();
+        }
+
+        // Function to initialize charts
+        function initializeCharts() {
+            const gradesCtx = document.getElementById('gradesChart')?.getContext('2d');
+            const progressCtx = document.getElementById('progressChart')?.getContext('2d');
+
+            if (gradesCtx) {
+                new Chart(gradesCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['HK1 22-23', 'HK2 22-23', 'HK1 23-24', 'HK2 23-24', 'HK1 24-25', 'HK2 24-25'],
+                        datasets: [{
+                            label: 'Điểm TB lớp học phần',
+                            data: [2.5, 2.6, 3.0, 3.2, 3.1, null],
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            tension: 0.1,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 4.0
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            } else {
+                console.error("Grades chart canvas not found");
+            }
+
+            if (progressCtx) {
+                const completedCredits = 124.9;
+                const totalCredits = 154.0;
+                const remainingCredits = totalCredits - completedCredits;
+
+                new Chart(progressCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Đã học', 'Còn lại'],
+                        datasets: [{
+                            data: [completedCredits, remainingCredits > 0 ? remainingCredits : 0],
+                            backgroundColor: [
+                                'rgb(65, 105, 225)', // Royal Blue
+                                'rgb(229, 231, 235)' // gray-200
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed.toFixed(1) + ' TC';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            } else {
+                 console.error("Progress chart canvas not found");
+             }
+        }
+
+        // DOMContentLoaded Setup
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load components and wait for them
+            const sidebarLoaded = loadComponent('sidebar.html', 'sidebar-container');
+            const headerLoaded = loadComponent('header.html', 'header-container');
+            await Promise.all([sidebarLoaded, headerLoaded]);
+
+            // Initialize active link AFTER sidebar is confirmed loaded
+            if (await sidebarLoaded) {
+                initializeSidebarActiveState();
+            } else {
+                 console.error("Sidebar failed to load, cannot initialize active state.");
+             }
+
+            // Load student specific data and initialize charts
+            await loadStudentData();
+        });
+    </script>
+</body>
+</html> 
