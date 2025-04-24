@@ -82,6 +82,15 @@
             text-align: center;
             border-top: 1px solid #d1d5db;
         }
+        /* Custom Select Box Border Style (same as training_points.html) */
+        .styled-select {
+            border: 1px solid #a0aec0; /* Slightly darker gray border (e.g., gray-400) */
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .styled-select:focus {
+            border-color: #4299e1; /* Tailwind's blue-500 */
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5); /* Corresponding blue shadow */
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -98,13 +107,13 @@
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div>
                             <label for="schoolYear" class="block text-sm font-medium text-gray-700 mb-1">Năm học</label>
-                            <select id="schoolYear" name="schoolYear" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                            <select id="schoolYear" name="schoolYear" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md styled-select">
                                 <option>2024-2025</option>
                             </select>
                         </div>
                         <div>
                             <label for="semester" class="block text-sm font-medium text-gray-700 mb-1">Học kỳ</label>
-                            <select id="semester" name="semester" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                            <select id="semester" name="semester" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md styled-select">
                                 <option value="HK1">Học kỳ 1</option>
                                 <option value="HK2" selected>Học kỳ 2</option>
                             </select>
